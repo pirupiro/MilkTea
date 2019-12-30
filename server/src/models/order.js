@@ -11,8 +11,10 @@ const OrderSchema = new Schema({
             quantity: Number,
             totalPrice: Number
         }
-    ]
+    ],
+    phone: String,
+    address: String
 });
 
-const OrderModel = mongoose.model('User', OrderSchema);
+const OrderModel = mongoose.model('Order', OrderSchema);
 module.exports = OrderModel;

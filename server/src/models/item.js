@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const ItemSchema = new Schema({
     name: String,
     price: Number,
-    uri: String,
-    category: String
+    category: String,
+    image: String
 });
 
-const ItemModel = mongoose.model('Category', ItemSchema);
+const ItemModel = mongoose.model('Item', ItemSchema);
 module.exports = ItemModel;

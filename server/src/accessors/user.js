@@ -6,12 +6,10 @@ class UserAccessor {
     }
 
     getByUsername(username) {
-        return UserModel.findOne({
-            username: username
-        }).lean();
+        return UserModel.findOne({ username }).lean();
     }
 
-    update(id, user) {
+    updateById(id, user) {
         return UserModel.findByIdAndUpdate(
             id,
             user,

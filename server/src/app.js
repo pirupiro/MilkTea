@@ -3,21 +3,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
-
-// Routers
-const userRouter = require('./routes/user');
-
-
-app.use(userRouter);
-
+// Database
 const mongoURI = 'mongodb://localhost:27017/milktea';
-const PORT = process.env.PORT || 5000;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(
+    mongoURI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
+    })
     .then(() => {
         console.log(`Connecting to ${mongoose.connection.name} database`)
     })
@@ -25,6 +20,27 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.error(error);
     });
 
+// Server
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+
+// Routers
+const userRouter = require('./routes/user');
+const itemRouter = require('./routes/item');
+const categoryRouter = require('./routes/category');
+const adminRouter = require('./routes/admin');
+
+app.use('/users', userRouter);
+app.use('/items', itemRouter);
+app.use('/categories', categoryRouter);
+app.use('/admins', adminRouter);
+
+app.use('/uploads', express.static('uploads'));
+
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`);
+    console.log(`Listening on port ${PORT}`);
 });
