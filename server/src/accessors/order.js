@@ -23,10 +23,10 @@ class OrderAccessor {
         return OrderModel.findById(id).lean();
     }
 
-    updateById(id, status) {
+    updateById(id, order) {
         return OrderModel.findByIdAndUpdate(
             id,
-            { status },
+            order,
             { new: true }
         ).lean();
     }

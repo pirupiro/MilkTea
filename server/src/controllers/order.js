@@ -82,8 +82,9 @@ class OrderController {
     updateOrderStatus(req, res) {
         const id = ObjectId(req.params.id);
         const status = req.body.status;
+        const order = { status };
 
-        orderAccessor.updateById(id, status)
+        orderAccessor.updateById(id, order)
             .then(order => {
                 if (order) {
                     return res.status(200).json({

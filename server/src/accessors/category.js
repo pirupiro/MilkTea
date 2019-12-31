@@ -8,6 +8,14 @@ class CategoryAccessor {
     getAll() {
         return CategoryModel.find().lean();
     }
+
+    updateById(id, category) {
+        return CategoryModel.findByIdAndUpdate(
+            id,
+            category,
+            { new: true }
+        ).lean();
+    }
 }
 
 module.exports = new CategoryAccessor();

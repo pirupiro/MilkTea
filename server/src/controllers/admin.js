@@ -40,15 +40,16 @@ class AdminController {
             });
     }
 
-    updatePassword(req, res) {
+    changePassword(req, res) {
         const id = ObjectId(req.params.id);
         const password = req.body.password;
+        const admin = { password };
 
-        adminAccessor.updateById(id, password)
+        adminAccessor.updateById(id, admin)
             .then(admin => {
                 if (admin) {
                     return res.status(200).json({
-                        message: 'Cập nhật mật khẩu thành công',
+                        message: 'Đổi mật khẩu thành công',
                         data: admin
                     });
                 } else {
