@@ -1,4 +1,5 @@
 const adminAccessor = require('../accessors/admin');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class AdminController {
     async signUp(req, res) {
@@ -40,7 +41,7 @@ class AdminController {
     }
 
     updatePassword(req, res) {
-        const id = req.params.id;
+        const id = ObjectId(req.params.id);
         const password = req.body.password;
 
         adminAccessor.updateById(id, password)
@@ -63,13 +64,13 @@ class AdminController {
     }
 
     deleteAccount(req, res) {
-        const id = req.params.id;
+        const id = ObjectId(req.params.id);
 
         adminAccessor.deleteById(id)
             .then(admin => {
                 if (admin) {
                     return res.status(200).json({
-                        message: 'Cập nhật mật khẩu thành công',
+                        message: 'Xóa tài khoản thành công',
                         data: admin
                     });
                 } else {

@@ -16,7 +16,7 @@ class UserController {
             } else {
                 user = await userAccessor.insert(userData);
                 return res.status(200).json({
-                    message: 'Tạo tài khoản mới thành công',
+                    message: 'Đăng ký tài khoản thành công',
                     data: user
                 });
             }

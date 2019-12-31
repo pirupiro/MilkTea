@@ -31,12 +31,13 @@ const userRouter = require('./routes/user');
 const itemRouter = require('./routes/item');
 const categoryRouter = require('./routes/category');
 const adminRouter = require('./routes/admin');
+const orderRouter = require('./routes/order');
 
 app.use('/users', userRouter);
 app.use('/items', itemRouter);
 app.use('/categories', categoryRouter);
 app.use('/admins', adminRouter);
-
+app.use('/orders', orderRouter);
 app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT || 5000;

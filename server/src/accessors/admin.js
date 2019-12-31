@@ -13,8 +13,8 @@ class AdminAccessor {
         return AdminModel.findByIdAndDelete(id).lean();
     }
 
-    updateById(id, admin) {
-        return AdminModel.findByIdAndUpdate(id, admin).lean();
+    updateById(id, password) {
+        return AdminModel.findByIdAndUpdate(id, { password }).lean();
     }
 
     getAll() {

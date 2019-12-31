@@ -1,4 +1,5 @@
 const categoryAccessor = require('../accessors/category');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class CategoryController {
     addNewCategory(req, res) {
@@ -33,7 +34,7 @@ class CategoryController {
     }
 
     editCategory(req, res) {
-        const id = req.params.id;
+        const id = ObjectId(req.params.id);
         const name = req.body.name;
         const category = { name };
 
