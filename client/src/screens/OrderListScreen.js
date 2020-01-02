@@ -1,49 +1,30 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     StyleSheet,
     View,
     Text
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import OrderComponent from '../components/OrderComponent';
 import orders from '../../data/orders';
+import UserContext from '../context/UserContext';
 
-export default class OrderListScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedOn: false
-        }
+export default function OrderListScreen(props) {
+    const user = useContext(UserContext);
+    const status = props.navigation.state.routeName.toLowerCase();
+    let filteredOrders = orders.filter((order, index) => order.status === status);
 
-        if (!this.state.loggedOn) {
-            this.props.navigation.navigate('LogInStack', { hasParent: true });
-        }
-    }
+    useEffect(() => {
 
-    static eng2vie = {
-        Waiting: 'Chờ',
-        Received: 'Tiếp nhận',
-        Completed: 'Hoàn thành'
-    };
+    });
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            tabBarLabel: this.eng2vie[navigation.state.routeName]
-        };
-    };
-
-    /*
-    * Based on routeName (Waiting, Received, Completed) stored in `navigation.state.routeName`
-    * we'll call APIs to fetch data (order in this case) whose status is corresponding to routeName.
-    * Then, pass data to FlatList
-    */
-    render() {
-        if (orders && orders.length > 0) {
+    if (user.loggedIn) {
+        if (filteredOrders && filteredOrders.length > 0) {
             return (
                 <View style={styles.container}>
                     <FlatList
-                        data={orders}
-                        renderItem={({ item, index }) => <OrderComponent {...item} />}
+                        data={filteredOrders}
+                        renderItem={({ item }) => <OrderComponent {...item} navigation={props.navigation} />}
                         keyExtractor={item => item._id.toString()}
                         numColumns={2}
                     ></FlatList>
@@ -58,7 +39,33 @@ export default class OrderListScreen extends Component {
                 </View>
             );
         }
+    } else {
+        return <ToLogin navigation={props.navigation} />;
     }
+}
+
+function ToLogin(props) {
+    return (
+        <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgb(236, 240, 241)'
+        }}>
+            <Text style={{ fontSize: 20 }}>Đăng nhập để xem thông tin đơn hàng</Text>
+            <TouchableHighlight
+                style={{
+                    marginTop: 20,
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                    backgroundColor: 'rgb(22, 160, 133)'
+                }}
+                onPress={() => { props.navigation.navigate('InfoStack'); }}
+            >
+                <Text style={{ fontSize: 20 }}>LOG IN</Text>
+            </TouchableHighlight>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

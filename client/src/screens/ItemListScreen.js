@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
-    SectionList
+    SectionList,
+    StatusBar
 } from 'react-native';
-import items from '../../data/items';
+// import items from '../../data/items';
 import ItemComponent from '../components/ItemComponent';
 import HeaderComponent from '../components/HeaderComponent';
+import axios from 'axios';
+import { url } from '../Networking';
 
-export default class ItemListScreen extends Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerShown: false
-        };
-    };
-
+export default function ItemListScreen(props) {
     /*
     * Data fetched from API will have the form:
     *   [
@@ -48,7 +45,21 @@ export default class ItemListScreen extends Component {
     *
     * to pass to `sections` prop of SectionList
     */
-    formatData(data) {
+
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const getItemList = async () => {
+            const res = await axios.get(url + '/items');
+            return res.data;
+        }
+
+        getItemList()
+            .then(data => { setItems(data.data); })
+            .catch(error => { console.error(error); });
+    }, []);
+
+    function formatData(data) {
         let formattedData = [];
         let titles = [];
 
@@ -69,24 +80,28 @@ export default class ItemListScreen extends Component {
         return formattedData;
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <SectionList
-                    sections={this.formatData(items)}
-                    renderItem={({ item }) => <ItemComponent {...item} navigation={this.props.navigation} />}
-                    renderSectionHeader={({ section }) => <HeaderComponent section={section} />}
-                    keyExtractor={item => item.name}
-                    showsVerticalScrollIndicator={false}
-                ></SectionList>
-            </View>
-        );
-    }
+    return (
+        <View style={styles.container}>
+            <SectionList
+                sections={formatData(items)}
+                renderItem={({ item }) => <ItemComponent {...item} navigation={props.navigation} />}
+                renderSectionHeader={({ section }) => <HeaderComponent section={section} />}
+                keyExtractor={item => item.name}
+                showsVerticalScrollIndicator={false}
+            ></SectionList>
+        </View>
+    );
+}
+
+ItemListScreen.navigationOptions = () => {
+    return {
+        headerShown: false
+    };
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 24
+        marginTop: StatusBar.currentHeight
     }
 });

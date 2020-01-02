@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import {
     StyleSheet,
     View,
@@ -9,69 +9,61 @@ import {
     StatusBar
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import UserContext from '../context/UserContext';
+import { getImageURI } from '../Networking';
 
 const { width: windowWith } = Dimensions.get('window');
 
-export default class ItemScreen extends Component {
-    static navigationOptions = () => {
-        return {
-            headerTransparent: true
-        };
-    };
+export default function ItemScreen(props) {
+    const user = useContext(UserContext);
+    const { _id, name, price, image, description } = props.navigation.state.params;
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedOn: false
-        };
-    }
-
-    formatNumber(number) {
+    function formatNumber(number) {
         return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     }
 
-    onCartPress = () => {
-        if (this.state.loggedOn) {
+    function onCartPress() {
+        if (user.loggedIn) {
             alert('Pressed cart');
         } else {
-            this.props.navigation.navigate('LogInStack', { hasParent: true });
+            props.navigation.navigate('InfoStack');
         }
-    };
+    }
 
-    render() {
-        const { name, price, uri, description } = this.props.navigation.state.params;
+    return (
+        <ScrollView contentContainerStyle={styles.container}>
+            <Image
+                source={{ uri: getImageURI(image) }}
+                style={styles.image}
+            ></Image>
 
-        return (
-            <ScrollView contentContainerStyle={styles.container}>
-                <Image
-                    source={{ uri: uri }}
-                    style={styles.image}
-                ></Image>
-
-                <View style={styles.priceSection}>
-                    <Text style={styles.price}>
-                        {this.formatNumber(price)} VNĐ
-                    </Text>
-
-                    <MaterialCommunityIcons
-                        name='cart-arrow-down'
-                        size={40}
-                        color='rgb(19, 15, 64)'
-                        onPress={() => {
-                            this.onCartPress();
-                        }}
-                    ></MaterialCommunityIcons>
-                </View>
-
-                <Text style={styles.name}>
-                    {name}
+            <View style={styles.priceSection}>
+                <Text style={styles.price}>
+                    {formatNumber(price)} VNĐ
                 </Text>
 
-                <Text style={styles.description}>{description}</Text>
-            </ScrollView>
-        );
-    }
+                <MaterialCommunityIcons
+                    name='cart-arrow-down'
+                    size={35}
+                    color='rgb(19, 15, 64)'
+                    onPress={onCartPress}
+                ></MaterialCommunityIcons>
+            </View>
+
+            <Text style={styles.name}>
+                {name}
+            </Text>
+
+            <Text style={styles.description}>{description}</Text>
+        </ScrollView>
+    );
 }
+
+ItemScreen.navigationOptions = () => {
+    return {
+        headerTransparent: true
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -79,22 +71,14 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight
     },
     priceSection: {
-        width: windowWith,
+        width: windowWith * 0.75,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: windowWith / 10
-    },
-    iconContainer: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: 'rgb(44, 58, 71)',
-        alignItems: 'center',
-        justifyContent: 'center'
+        marginVertical: 30
     },
     price: {
-        fontSize: 24,
+        fontSize: 22,
         color: 'rgb(19, 15, 64)'
     },
     image: {
@@ -102,15 +86,15 @@ const styles = StyleSheet.create({
         height: windowWith * 9 / 16
     },
     name: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 30,
         color: 'rgb(19, 15, 64)'
     },
     description: {
         color: 'gray',
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'justify',
-        marginHorizontal: windowWith / 10
+        width: windowWith * 0.75
     },
 });

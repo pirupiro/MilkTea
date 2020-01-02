@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     View,
     KeyboardAvoidingView,
@@ -14,117 +14,103 @@ import {
     Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import UserContext from '../context/UserContext';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default class LogInScreen extends Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerShown: false
-        }
+export default function LogInScreen(props) {
+    // Use states
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Use refs
+    const passwordRef = useRef();
+
+    const user = useContext(UserContext);
+
+    useEffect(() => {
+
+    }, [user.loggedIn]);
+
+    function onLogInPress() {
+        user.setLoggedIn(true);
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: ''
-        };
-    }
-
-    onLogInPress = () => {
-        alert('Pressed log in button');
-    };
-
-    render() {
-        const hasParent = this.props.navigation.getParam('hasParent', false);
-
-        return (
-            <KeyboardAvoidingView
+    return (
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior='padding'
+        >
+            <TouchableWithoutFeedback
                 style={styles.container}
-                behavior='padding'
+                onPress={Keyboard.dismiss}
             >
-                <TouchableWithoutFeedback
-                    style={styles.container}
-                    onPress={Keyboard.dismiss}
-                >
-                    <View style={styles.container}>
-                        <Image
-                            style={styles.logo}
-                            source={require('../../images/pirutea.png')}
-                        ></Image>
+                <View style={styles.container}>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../images/pirutea.png')}
+                    ></Image>
 
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Username'
-                            placeholderTextColor='rgba(255, 255, 255, 0.5)'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onSubmitEditing={() => { this.refs.password.focus() }}
-                            returnKeyType='next'
-                            onChangeText={(text) => {
-                                this.setState({ username: text })
-                            }}
-                        ></TextInput>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Username'
+                        placeholderTextColor='rgba(255, 255, 255, 0.5)'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onSubmitEditing={() => { passwordRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { setUsername(text); }}
+                    ></TextInput>
 
-                        <TextInput
-                            ref='password'
-                            style={styles.input}
-                            placeholder='Password'
-                            placeholderTextColor='rgba(255, 255, 255, 0.5)'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            secureTextEntry
-                            onChangeText={(text) => {
-                                this.setState({ password: text })
-                            }}
-                        ></TextInput>
+                    <TextInput
+                        ref={passwordRef}
+                        style={styles.input}
+                        placeholder='Password'
+                        placeholderTextColor='rgba(255, 255, 255, 0.5)'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        secureTextEntry
+                        onChangeText={text => { setPassword(text); }}
+                    ></TextInput>
 
-                        <TouchableOpacity
-                            style={styles.loginButton}
-                            onPress={() => {
-                                this.onLogInPress();
-                            }}
-                        >
-                            <Text style={styles.loginText}>
-                                LOG IN
-                            </Text>
-                        </TouchableOpacity>
-
-                        <Text style={{ color: 'rgba(255, 255, 255, 0.75)' }}>
-                            Don't have an account ? <Text
-                                style={styles.signUpLabel}
-                                onPress={() => {
-                                    const { navigate } = this.props.navigation;
-                                    navigate('SignUpScreen');
-                                }}
-                            >
-                                Sign up
-                            </Text>
+                    <TouchableOpacity
+                        style={styles.loginButton}
+                        onPress={onLogInPress}
+                    >
+                        <Text style={styles.loginText}>
+                            LOG IN
                         </Text>
-                    </View>
-                </TouchableWithoutFeedback>
+                    </TouchableOpacity>
 
-                {
-                    hasParent && (
-                        <TouchableHighlight
-                            style={styles.goBackButton}
-                            underlayColor='rgba(0, 0, 0, 0.5)'
-                            onPress={() => {
-                                this.props.navigation.goBack(null);
-                            }}
+                    <Text style={{ color: 'rgba(255, 255, 255, 0.75)' }}>
+                        Don't have an account ? <Text
+                            style={styles.signUpLabel}
+                            onPress={() => { props.navigation.navigate('SignUpScreen'); }}
                         >
-                            <Ionicons
-                                name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
-                                size={25}
-                                color='white'
-                            ></Ionicons>
-                        </TouchableHighlight>
-                    )
-                }
-            </KeyboardAvoidingView >
-        );
-    }
+                            Sign up
+                        </Text>
+                    </Text>
+                </View>
+            </TouchableWithoutFeedback>
+
+            {/* {
+                fromRoute && ['ItemListScreen', 'ItemScreen'].includes(fromRoute) &&
+                (
+                    <TouchableHighlight
+                        style={styles.goBackButton}
+                        underlayColor='rgba(0, 0, 0, 0.25)'
+                        onPress={() => { props.navigation.goBack(); }}
+                    >
+                        <Ionicons
+                            name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
+                            size={25}
+                            color='white'
+                        ></Ionicons>
+                    </TouchableHighlight>
+                )
+            } */}
+        </KeyboardAvoidingView>
+    );
 }
 
 const styles = StyleSheet.create({

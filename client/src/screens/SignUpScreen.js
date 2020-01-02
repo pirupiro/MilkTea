@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     View,
     StyleSheet,
@@ -9,187 +9,221 @@ import {
 } from 'react-native';
 import PickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import UserContext from '../context/UserContext';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default class SignUp extends Component {
-    static navigationOptions = {
+export default function SignUpScreen(props) {
+    // Use states
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
+    const [name, setName] = useState('');
+    const [gender, setGender] = useState('male');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+
+    // Use refs
+    const passwordRef = useRef();
+    const confirmRef = useRef();
+    const nameRef = useRef();
+    const phoneRef = useRef();
+    const addressRef = useRef();
+
+    const user = useContext(UserContext);
+
+    useEffect(() => {
+        if (user.loggedIn) {
+            props.navigation.goBack(null);
+        }
+    });
+
+    function validate() {
+        const wordPattern = /^[a-zA-z0-9]+$/;
+        const numberPatter = /^\d+$/;
+
+        if (!username || !password || !confirm || !name || !phone || !address)
+            return {
+                error: true,
+                message: 'Các trường thông tin không được phép để trống'
+            };
+
+        if (!wordPattern.test(username))
+            return {
+                error: true,
+                message: 'Username không hợp lệ, chỉ được sử dụng các ký tự a-z, A-Z, 0-9'
+            };
+
+        if (!wordPattern.test(password) || !wordPattern.test(confirm))
+            return {
+                error: true,
+                message: 'Password không hợp lệ, chỉ được sử dụng các ký tự a-z, A-Z, 0-9'
+            };
+
+        if (!numberPatter.test(phone))
+            return {
+                error: true,
+                message: 'Số điện thoại không hợp lệ, chỉ được sử dụng các ký tự số'
+            };
+
+        if (phone !== confirm)
+            return {
+                error: true,
+                message: 'Mật khẩu và xác nhận không trùng khớp'
+            };
+
+        return { error: false };
+    }
+
+    function onSignUpPress() {
+        console.log(username, password, confirm, name, gender, phone, address);
+        const validation = validate();
+
+        if (validation.error) {
+            console.log(validation.message);
+        } else {
+            props.navigation.goBack();
+        }
+    };
+
+    return (
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            enableOnAndroid
+            extraScrollHeight={100}
+        >
+            <View style={styles.section}>
+                <Text style={styles.header}>ACCOUNT</Text>
+                <View style={styles.thickSeparator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Username</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Enter your username'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onSubmitEditing={() => { passwordRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { setUsername(text); }}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        ref={passwordRef}
+                        style={styles.input}
+                        placeholder='Enter your password'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onSubmitEditing={() => { confirmRef.current.focus() }}
+                        returnKeyType='next'
+                        secureTextEntry
+                        onChangeText={text => { setPassword(text); }}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Confirm</Text>
+                    <TextInput
+                        ref={confirmRef}
+                        style={styles.input}
+                        placeholder='Confirm your password'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onSubmitEditing={() => { nameRef.current.focus() }}
+                        returnKeyType='next'
+                        secureTextEntry
+                        onChangeText={text => { setConfirm(text); }}
+                    ></TextInput>
+                </View>
+            </View>
+
+            <View style={styles.section}>
+                <Text style={styles.header}>PERSONAL INFO</Text>
+                <View style={styles.thickSeparator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Full name</Text>
+                    <TextInput
+                        ref={nameRef}
+                        style={styles.input}
+                        placeholder='Enter your full name'
+                        autoCorrect={false}
+                        autoCapitalize='words'
+                        onSubmitEditing={() => { phoneRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { setName(text); }}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Gender</Text>
+                    <View style={[styles.input, { justifyContent: 'center' }]}>
+                        <PickerSelect
+                            placeholder={{}}
+                            onValueChange={(value, index) => { setGender(value); }}
+                            items={[
+                                { label: 'Male', value: 'male' },
+                                { label: 'Female', value: 'female' },
+                                { label: 'Other', value: 'other' },
+                            ]}
+                        ></PickerSelect>
+                    </View>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Phone</Text>
+                    <TextInput
+                        ref={phoneRef}
+                        style={styles.input}
+                        placeholder='Enter your phone number'
+                        autoCorrect={false}
+                        keyboardType='number-pad'
+                        onSubmitEditing={() => { addressRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { setPhone(text); }}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Address</Text>
+                    <TextInput
+                        ref={addressRef}
+                        style={styles.input}
+                        placeholder='Enter your address'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onChangeText={text => { setAddress(text); }}
+                    ></TextInput>
+                </View>
+            </View>
+            <TouchableOpacity
+                style={styles.signUpButton}
+                onPress={onSignUpPress}
+            >
+                <Text style={styles.signUpText}>SIGN UP</Text>
+            </TouchableOpacity>
+        </KeyboardAwareScrollView>
+    );
+}
+
+SignUpScreen.navigationOptions = () => {
+    return {
         headerTitle: 'Sign up'
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            confirm: '',
-            gender: 'male',
-            phoneNumber: '',
-            address: ''
-        };
-    }
-
-    /*
-    * TODO: validate user's inputs before calling API
-    * Example:
-    * - username matchs [a-zA-Z](6,)
-    * - check password field and confirm field if they match.
-    */
-    onSignUpPress = () => {
-        alert(JSON.stringify(this.state));
-    };
-
-    render() {
-        return (
-            <KeyboardAwareScrollView
-                contentContainerStyle={styles.container}
-                enableOnAndroid
-            >
-                <View style={styles.section}>
-                    <Text style={styles.header}>ACCOUNT</Text>
-                    <View style={styles.thickSeparator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Username</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Enter your username'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onSubmitEditing={() => { this.refs.password.focus() }}
-                            returnKeyType='next'
-                            onChangeText={(text) => {
-                                this.setState({ username: text });
-                            }}
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput
-                            ref='password'
-                            style={styles.input}
-                            placeholder='Enter your password'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onSubmitEditing={() => { this.refs.confirm.focus() }}
-                            returnKeyType='next'
-                            secureTextEntry
-                            onChangeText={(text) => {
-                                this.setState({ password: text });
-                            }}
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Confirm</Text>
-                        <TextInput
-                            ref='confirm'
-                            style={styles.input}
-                            placeholder='Confirm your password'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onSubmitEditing={() => { this.refs.fullName.focus() }}
-                            returnKeyType='next'
-                            secureTextEntry
-                            onChangeText={(text) => {
-                                this.setState({ confirm: text });
-                            }}
-                        ></TextInput>
-                    </View>
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.header}>PERSONAL INFO</Text>
-                    <View style={styles.thickSeparator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Full name</Text>
-                        <TextInput
-                            ref='fullName'
-                            style={styles.input}
-                            placeholder='Enter your full name'
-                            autoCorrect={false}
-                            autoCapitalize='words'
-                            onSubmitEditing={() => { this.refs.phone.focus() }}
-                            returnKeyType='next'
-                            onChangeText={(text) => {
-                                this.setState({ fullName: text });
-                            }}
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Gender</Text>
-                        <View style={[styles.input, { justifyContent: 'center' }]}>
-                            <PickerSelect
-                                placeholder={{}}
-                                onValueChange={(value, index) => {
-                                    this.setState({
-                                        gender: value
-                                    });
-                                }}
-                                items={[
-                                    { label: 'Male', value: 'male' },
-                                    { label: 'Female', value: 'female' },
-                                    { label: 'Other', value: 'other' },
-                                ]}
-                            ></PickerSelect>
-                        </View>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Phone</Text>
-                        <TextInput
-                            ref='phone'
-                            style={styles.input}
-                            placeholder='Enter your phone number'
-                            autoCorrect={false}
-                            keyboardType='number-pad'
-                            onSubmitEditing={() => { this.refs.address.focus() }}
-                            returnKeyType='next'
-                            onChangeText={(text) => {
-                                this.setState({ phoneNumber: text });
-                            }}
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Address</Text>
-                        <TextInput
-                            ref='address'
-                            style={styles.input}
-                            placeholder='Enter your address'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onChangeText={(text) => {
-                                this.setState({ address: text });
-                            }}
-                        ></TextInput>
-                    </View>
-                </View>
-                <TouchableOpacity
-                    style={styles.signUpButton}
-                    onPress={() => {
-                        this.onSignUpPress();
-                    }}
-                >
-                    <Text style={styles.signUpText}>SIGN UP</Text>
-                </TouchableOpacity>
-            </KeyboardAwareScrollView>
-        );
-    }
-}
+};
 
 const styles = StyleSheet.create({
     container: {

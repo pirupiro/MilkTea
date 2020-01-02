@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     StyleSheet,
@@ -7,72 +7,59 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import UserContext from '../context/UserContext';
+import { getImageURI } from '../Networking';
 
-export default class ItemComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedOn: false
-        };
-    }
+export default function ItemComponent(props) {
+    const user = useContext(UserContext);
 
-    formatNumber(number) {
+    function formatNumber(number) {
         return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     }
 
-    onItemPress = () => {
-        this.props.navigation.navigate('ItemScreen', { ...this.props });
+    function onItemPress() {
+        props.navigation.navigate('ItemScreen', { ...props });
     };
 
-    onCartPress = () => {
-        if (this.state.loggedOn) {
+    function onCartPress() {
+        if (user.loggedIn) {
             alert('Pressed cart');
         } else {
-            this.props.navigation.navigate(
-                'LogInStack',
-                { hasParent: true }
-            );
+            props.navigation.navigate('InfoStack');
         }
     };
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={styles.subContainer}
-                    onPress={() => {
-                        this.onItemPress();
-                    }}
-                >
-                    <Image
-                        source={{ uri: this.props.uri }}
-                        style={styles.image}
-                    ></Image>
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.subContainer}
+                onPress={onItemPress}
+            >
+                <Image
+                    source={{ uri: getImageURI(props.image) }}
+                    style={styles.image}
+                ></Image>
 
-                    <View style={styles.info}>
-                        <Text style={styles.name}>{this.props.
-                        name}</Text>
-                        <Text style={styles.price}>{this.formatNumber(this.props.price)}</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={styles.info}>
+                    <Text style={styles.name}>{props.name}</Text>
+                    <Text style={styles.price}>{formatNumber(props.price)}</Text>
+                </View>
+            </TouchableOpacity>
 
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={styles.iconContainer}
-                    onPress={() => {
-                        this.onCartPress();
-                    }}
-                >
-                    <MaterialCommunityIcons
-                        name='cart-arrow-down'
-                        size={30}
-                        color='black'
-                    ></MaterialCommunityIcons>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+            <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.iconContainer}
+                onPress={onCartPress}
+            >
+                <MaterialCommunityIcons
+                    name='cart-arrow-down'
+                    size={30}
+                    color='black'
+                ></MaterialCommunityIcons>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

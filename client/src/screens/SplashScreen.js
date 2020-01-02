@@ -1,43 +1,48 @@
-import React, { Component } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
     View,
     StyleSheet,
     Image,
     Dimensions
 } from 'react-native';
+import UserContext from '../context/UserContext';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default class Splash extends Component {
-    performTask = async () => {
+export default function Splash(props) {
+    const user = useContext(UserContext);
+
+    async function performTask() {
         return new Promise((resolve) => {
             setTimeout(
                 () => { resolve('result'); },
                 3000
             );
         });
-    };
+    }
 
-    async componentDidMount() {
-        // Preload data from an external API
-        // Preload data using AsyncStorage
-        const data = await this.performTask();
+    useEffect(() => {
+        async function fetchData() {
+            // Preload data from an external API
+            // Preload data using AsyncStorage
+            const data = await performTask();
 
-        if (data !== null) {
-            this.props.navigation.navigate('MainNavigator');
+            if (data !== null) {
+                props.navigation.navigate('MainNavigator');
+            }
         }
-    }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Image
-                    source={require('../../images/milktea.png')}
-                    style={styles.image}
-                ></Image>
-            </View>
-        );
-    }
+        fetchData();
+    });
+
+    return (
+        <View style={styles.container}>
+            <Image
+                source={require('../../images/milktea.png')}
+                style={styles.image}
+            ></Image>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

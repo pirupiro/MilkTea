@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import {
     View,
     StyleSheet,
@@ -9,69 +9,64 @@ import {
     Dimensions,
     TextInput,
     Switch,
-    Image
+    Image,
+    StatusBar
 } from 'react-native';
 import PickerSelect from 'react-native-picker-select';
+import UserContext from '../context/UserContext';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LogInScreen from '../screens/LogInScreen';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default class Info extends Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerShown: false
-        };
-    };
+export default function InfoScreen(props) {
+    // Use states
+    const [changePassword, setChangePassword] = useState(false);
+    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedOn: false, // Value may vary
-            fullName: 'Piru Piro',
-            gender: 'male',
-            phoneNumber: '0325306161',
-            address: 'Blah blah blah',
-            changePassword: false,
-            password: '',
-            newPassword: '',
-            confirm: ''
-        };
+    // Use refs
+    const phoneRef = useRef();
+    const addressRef = useRef();
+    const newPasswordRef = useRef();
+    const confirmRef = useRef();
 
-        if (!this.state.loggedOn) {
-            this.props.navigation.navigate('LogInStack');
-        }
-    }
+    const user = useContext(UserContext);
 
     /*
     * This button press event will call API to edit user profile
     * If successful, update components
     * If failed, show message
     */
-    onSavePress = () => {
+    function onSavePress() {
         alert('Pressed save button');
-    };
+    }
 
-    render() {
+    function onLogOutPress() {
+        user.setLoggedIn(false);
+    }
+
+    if (user.loggedIn) {
         return (
-            <TouchableWithoutFeedback
-                style={styles.container}
-                onPress={Keyboard.dismiss}
+            <KeyboardAwareScrollView
+                contentContainerStyle={styles.container}
+                enableOnAndroid
+                extraScrollHeight={100}
             >
                 <View style={styles.container}>
                     <View style={styles.section}>
                         <View style={styles.field}>
                             <Text style={styles.label}>Full name</Text>
                             <TextInput
-                                ref='fullName'
                                 style={styles.input}
                                 placeholder='Enter your full name'
                                 autoCorrect={false}
                                 autoCapitalize='words'
-                                onSubmitEditing={() => { this.refs.phone.focus() }}
+                                onSubmitEditing={() => { phoneRef.current.focus() }}
                                 returnKeyType='next'
-                                onChangeText={(text) => {
-                                    this.setState({ fullName: text });
-                                }}
-                                value={this.state.fullName}
+                                onChangeText={text => { user.setName(text); }}
+                                value={user.name}
                             ></TextInput>
                         </View>
 
@@ -82,12 +77,8 @@ export default class Info extends Component {
                             <View style={[styles.input, { justifyContent: 'center' }]}>
                                 <PickerSelect
                                     placeholder={{}}
-                                    value={this.state.gender}
-                                    onValueChange={(value, index) => {
-                                        this.setState({
-                                            gender: value
-                                        });
-                                    }}
+                                    value={user.gender}
+                                    onValueChange={(value, index) => { user.setGender(value); }}
                                     items={[
                                         { label: 'Male', value: 'male' },
                                         { label: 'Female', value: 'female' },
@@ -102,17 +93,15 @@ export default class Info extends Component {
                         <View style={styles.field}>
                             <Text style={styles.label}>Phone</Text>
                             <TextInput
-                                ref='phone'
+                                ref={phoneRef}
                                 style={styles.input}
                                 placeholder='Enter your phone number'
                                 autoCorrect={false}
                                 keyboardType='number-pad'
-                                onSubmitEditing={() => { this.refs.address.focus() }}
+                                onSubmitEditing={() => { addressRef.current.focus() }}
                                 returnKeyType='next'
-                                onChangeText={(text) => {
-                                    this.setState({ phoneNumber: text });
-                                }}
-                                value={this.state.phoneNumber}
+                                onChangeText={text => { user.setPhone(text); }}
+                                value={user.phone}
                             ></TextInput>
                         </View>
 
@@ -120,16 +109,14 @@ export default class Info extends Component {
 
                         <View style={styles.field}>
                             <Text style={styles.label}>Address</Text>
-                            <TextInput // Address
-                                ref='address'
+                            <TextInput
+                                ref={addressRef}
                                 style={styles.input}
                                 placeholder='Enter your address'
                                 autoCorrect={false}
                                 autoCapitalize='none'
-                                onChangeText={(text) => {
-                                    this.setState({ address: text });
-                                }}
-                                value={this.state.address}
+                                onChangeText={text => { user.setAddress(text); }}
+                                value={user.address}
                             ></TextInput>
                         </View>
                     </View>
@@ -139,34 +126,26 @@ export default class Info extends Component {
                             Change password ?
                         </Text>
                         <Switch
-                            onValueChange={() => {
-                                this.setState(prevState => {
-                                    return {
-                                        changePassword: !prevState.changePassword
-                                    };
-                                });
-                            }}
-                            value={this.state.changePassword}
+                            onValueChange={() => { setChangePassword(!changePassword); }}
+                            value={changePassword}
                         ></Switch>
                     </View>
 
                     {
-                        this.state.changePassword && (
+                        changePassword &&
+                        (
                             <View style={styles.section}>
                                 <View style={styles.field}>
                                     <Text style={styles.label}>Current</Text>
                                     <TextInput
-                                        ref='password'
                                         style={styles.input}
                                         placeholder='Enter your current password'
                                         autoCorrect={false}
                                         autoCapitalize='none'
-                                        onSubmitEditing={() => { this.refs.newPassword.focus() }}
+                                        onSubmitEditing={() => { newPasswordRef.current.focus() }}
                                         returnKeyType='next'
                                         secureTextEntry
-                                        onChangeText={(text) => {
-                                            this.setState({ password: text });
-                                        }}
+                                        onChangeText={text => { setPassword(text); }}
                                     ></TextInput>
                                 </View>
 
@@ -175,17 +154,15 @@ export default class Info extends Component {
                                 <View style={styles.field}>
                                     <Text style={styles.label}>New</Text>
                                     <TextInput
-                                        ref='newPassword'
+                                        ref={newPasswordRef}
                                         style={styles.input}
                                         placeholder='Enter your new password'
                                         autoCorrect={false}
                                         autoCapitalize='none'
-                                        onSubmitEditing={() => { this.refs.confirm.focus() }}
+                                        onSubmitEditing={() => { confirmRef.current.focus() }}
                                         returnKeyType='next'
                                         secureTextEntry
-                                        onChangeText={(text) => {
-                                            this.setState({ newPassword: text });
-                                        }}
+                                        onChangeText={text => { setNewPassword(text); }}
                                     ></TextInput>
                                 </View>
 
@@ -194,56 +171,46 @@ export default class Info extends Component {
                                 <View style={styles.field}>
                                     <Text style={styles.label}>Confirm</Text>
                                     <TextInput
-                                        ref='confirm'
+                                        ref={confirmRef}
                                         style={styles.input}
                                         placeholder='Confirm your new password'
                                         autoCorrect={false}
                                         autoCapitalize='none'
                                         secureTextEntry
-                                        onChangeText={(text) => {
-                                            this.setState({ confirm: text });
-                                        }}
+                                        onChangeText={text => { setConfirm(text); }}
                                     ></TextInput>
                                 </View>
                             </View>
                         )
                     }
 
-                    <TouchableOpacity
-                        style={styles.saveButton}
-                        onPress={() => {
-                            this.onSavePress();
-                        }}
-                    >
-                        <Text style={styles.saveText}>SAVE</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonField}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={onSavePress}
+                        >
+                            <Text style={styles.buttonText}>SAVE</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={onLogOutPress}
+                        >
+                            <Text style={styles.buttonText}>LOG OUT</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </KeyboardAwareScrollView>
         );
+    } else {
+        return <LogInScreen navigation={props.navigation} />;
     }
 }
 
 const styles = StyleSheet.create({
-    login: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgb(44, 62, 80)'
-    },
-    message: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: 'white',
-        width: windowWidth * 0.75
-    },
-    logo: {
-        height: windowWidth * 0.5,
-        width: windowWidth * 0.5
-    },
     container: {
-        flex: 1,
         alignItems: 'center',
-        marginTop: 24
+        marginTop: StatusBar.currentHeight
     },
     section: {
         paddingVertical: 10,
@@ -254,15 +221,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 35,
-        marginVertical: 10
+        height: 50
     },
     label: {
         fontSize: 16,
         color: 'rgb(0, 98, 102)'
     },
     input: {
-        height: 40,
+        height: 50,
         width: windowWidth * 0.6
     },
     separator: {
@@ -274,15 +240,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10
     },
-    saveButton: {
-        marginTop: 10,
+    buttonField: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         width: windowWidth * 0.9,
+        marginTop: 30
+    },
+    button: {
+        width: windowWidth * 0.4,
         height: 40,
         backgroundColor: 'rgb(39, 174, 96)',
         justifyContent: 'center',
-        marginBottom: 15
     },
-    saveText: {
+    buttonText: {
         fontSize: 18,
         textAlign: 'center',
         color: 'white'

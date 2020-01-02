@@ -73,7 +73,7 @@ const items = [
         name: 'Trà Cherry Macchiato',
         price: 55000,
         uri: 'https://product.hstatic.net/1000075078/product/cherry_mac_6a3403fdb832464da88de8c6e6ddf662_master.jpg',
-        category: 'Cà phê',
+        category: 'Trà',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pulvinar neque, sed interdum velit malesuada sollicitudin. Proin ornare blandit nulla. Quisque at ornare nisl, eget ullamcorper ligula. In ullamcorper justo at interdum lacinia. Praesent venenatis ultrices sapien id faucibus. Mauris eu massa vitae risus auctor mattis a ut elit. Donec eu dolor nisi. Etiam auctor libero sit amet vulputate imperdiet. Aenean pharetra odio ut nibh commodo, id tincidunt diam interdum. Fusce ultricies sodales neque pretium dignissim. Cras aliquet vitae tellus vitae mollis. Ut vel sapien a nibh tincidunt malesuada. Vestibulum maximus ante non nisi dignissim hendrerit ut eget augue'
     },
     {
