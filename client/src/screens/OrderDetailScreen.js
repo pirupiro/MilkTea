@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     StyleSheet,
     Dimensions,
     FlatList,
-    ScrollView,
     Text,
-    View,
-    StatusBar
+    View
 } from 'react-native';
 import orderDetails from '../../data/orderDetails';
 import OrderDetailComponent from '../components/OrderDetailComponent';
@@ -16,18 +14,21 @@ const windowWidth = Dimensions.get('window').width;
 export default function OrderScreen(props) {
     const { weekDay, date, time, totalPrice } = props.navigation.state.params;
 
+    useEffect(() => {
+        // User order id to fetch api and get order detail here.
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text style={styles.time}>{time}</Text>
-            <Text style={styles.date}>{weekDay + ', ' + date}</Text>
+            <Text style={styles.date}>{weekDay + ', ngày ' + date}</Text>
             <FlatList
                 data={orderDetails}
                 keyExtractor={item => item._id.toString()}
-                renderItem={({ item }) => <OrderDetailComponent {...item} />}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                renderItem={({ item, index }) => <OrderDetailComponent {...item} index={index} />}
             ></FlatList>
-            <View style={styles.skew}>
-                <Text style={styles.totalPrice}>Tổng: {totalPrice}</Text>
+            <View style={styles.right}>
+                <Text style={styles.totalPrice}>Tổng: {totalPrice}đ</Text>
             </View>
         </View>
     );
@@ -36,27 +37,32 @@ export default function OrderScreen(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: StatusBar.currentHeight,
         alignItems: 'center'
     },
     time: {
-        fontSize: 18
+        fontSize: 20,
+        marginTop: 10,
+        fontWeight: 'bold'
     },
     date: {
-        fontSize: 22,
-        color: 'blue'
+        fontSize: 20,
+        marginBottom: 10,
+        color: 'rgb(10, 61, 98)',
+        fontWeight: 'bold'
     },
     separator: {
         width: windowWidth,
         borderWidth: 1,
         borderColor: 'black'
     },
-    skew: {
-        padding: 20,
+    right: {
+        padding: 10,
         width: windowWidth,
         flexDirection: 'row-reverse'
     },
     totalPrice: {
-        fontSize: 24
+        fontSize: 22,
+        color: 'rgb(159, 35, 93)',
+        fontWeight: 'bold'
     }
 });

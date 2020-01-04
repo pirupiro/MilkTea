@@ -17,6 +17,7 @@ class OrderController {
         orderAccessor.insert(order)
             .then(order => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Tạo mới đơn hàng thành công',
                     data: order
                 });
@@ -34,6 +35,7 @@ class OrderController {
             orderAccessor.getAllByStatusWithUserId(status, userId)
                 .then(orders => {
                     return res.status(200).json({
+                        error: false,
                         message: 'Truy xuất danh sách đơn hàng thành công',
                         data: orders
                     });
@@ -46,6 +48,7 @@ class OrderController {
             orderAccessor.getAllByStatus(status)
                 .then(orders => {
                     return res.status(200).json({
+                        error: false,
                         message: 'Truy xuất danh sách đơn hàng thành công',
                         data: orders
                     });
@@ -64,11 +67,13 @@ class OrderController {
             .then(order => {
                 if (order) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Truy xuất thông tin chi tiết đơn hàng thành công',
                         data: order
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Đơn hàng không tồn tại'
                     });
                 }
@@ -88,11 +93,13 @@ class OrderController {
             .then(order => {
                 if (order) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Cập nhật tình trạng đơn hàng thành công',
                         data: order
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Đơn hàng không tồn tại'
                     });
                 }

@@ -10,12 +10,14 @@ class AdminController {
             let admin = await adminAccessor.getByUsername(username);
 
             if (admin) {
-                return res.status(400).json({
+                return res.status(200).json({
+                    error: true,
                     message: 'Tài khoản này đã tồn tại'
                 });
             } else {
                 admin = await adminAccessor.insert(adminData);
                 return res.status(200).json({
+                    error: false,
                     message: 'Tạo tài khoản mới thành công',
                     data: admin
                 });
@@ -30,6 +32,7 @@ class AdminController {
         adminAccessor.getAll()
             .then(admins => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Truy xuất danh sách quản trị viên thành công',
                     data: admins
                 });
@@ -49,11 +52,13 @@ class AdminController {
             .then(admin => {
                 if (admin) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Đổi mật khẩu thành công',
                         data: admin
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Tài khoản không tồn tại'
                     });
                 }
@@ -71,11 +76,13 @@ class AdminController {
             .then(admin => {
                 if (admin) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Xóa tài khoản thành công',
                         data: admin
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Tài khoản không tồn tại'
                     });
                 }

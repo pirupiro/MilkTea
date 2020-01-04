@@ -6,29 +6,17 @@ import {
     Dimensions,
     Text,
     ScrollView,
-    StatusBar
+    StatusBar,
+    TouchableOpacity
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import UserContext from '../context/UserContext';
 import { getImageURI } from '../Networking';
 
 const { width: windowWith } = Dimensions.get('window');
 
 export default function ItemScreen(props) {
-    const user = useContext(UserContext);
-    const { _id, name, price, image, description } = props.navigation.state.params;
-
-    function formatNumber(number) {
-        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    }
-
-    function onCartPress() {
-        if (user.loggedIn) {
-            alert('Pressed cart');
-        } else {
-            props.navigation.navigate('InfoStack');
-        }
-    }
+    const { name, price, image, description, onCartPress, formatNumber } = props.navigation.state.params;
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -39,15 +27,23 @@ export default function ItemScreen(props) {
 
             <View style={styles.priceSection}>
                 <Text style={styles.price}>
-                    {formatNumber(price)} VNĐ
+                    {formatNumber(price)} đồng
                 </Text>
 
-                <MaterialCommunityIcons
-                    name='cart-arrow-down'
-                    size={35}
-                    color='rgb(19, 15, 64)'
+                <TouchableOpacity
+                    style={{
+                        padding: 10,
+                        backgroundColor: 'rgb(223, 230, 233)',
+                        borderRadius: 30
+                    }}
                     onPress={onCartPress}
-                ></MaterialCommunityIcons>
+                >
+                    <MaterialCommunityIcons
+                        name='cart-arrow-down'
+                        size={30}
+                        color='rgb(19, 15, 64)'
+                    ></MaterialCommunityIcons>
+                </TouchableOpacity>
             </View>
 
             <Text style={styles.name}>
@@ -59,9 +55,17 @@ export default function ItemScreen(props) {
     );
 }
 
-ItemScreen.navigationOptions = () => {
+ItemScreen.navigationOptions = ({ navigation }) => {
     return {
-        headerTransparent: true
+        headerTransparent: true,
+        headerRight: (
+            <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
+                style={{ marginRight: 15 }}
+                size={30}
+                onPress={() => { navigation.navigate('CartScreen'); }}
+            ></Ionicons>
+        )
     };
 };
 
@@ -88,13 +92,13 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 30,
         color: 'rgb(19, 15, 64)'
     },
     description: {
         color: 'gray',
         fontSize: 18,
         textAlign: 'justify',
-        width: windowWith * 0.75
+        width: windowWith * 0.75,
+        marginVertical: 30
     },
 });

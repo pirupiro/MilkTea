@@ -1,13 +1,12 @@
 import React from 'react';
-import InfoScreen from '../screens/InfoScreen';
-import LogInScreen from '../screens/LogInScreen';
+import Switch from '../screens/Switch';
 import SignUpScreen from '../screens/SignUpScreen';
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesome } from '@expo/vector-icons';
 
 const InfoStack = createStackNavigator({
-    InfoScreen: {
-        screen: InfoScreen,
+    Switch: {
+        screen: Switch,
         navigationOptions: {
             headerShown: false
         }

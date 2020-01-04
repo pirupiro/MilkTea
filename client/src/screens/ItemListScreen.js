@@ -1,62 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
     StyleSheet,
     View,
     SectionList,
-    StatusBar
+    Platform
 } from 'react-native';
-// import items from '../../data/items';
+import { Ionicons } from '@expo/vector-icons';
 import ItemComponent from '../components/ItemComponent';
 import HeaderComponent from '../components/HeaderComponent';
-import axios from 'axios';
-import { url } from '../Networking';
+import ItemContext from '../context/ItemContext';
 
 export default function ItemListScreen(props) {
-    /*
-    * Data fetched from API will have the form:
-    *   [
-    *       {
-    *           name: string,
-    *           price: int,
-    *           category: string,
-    *           uri: string,
-    *           description: string
-    *       },
-    *       ...
-    *   ]
-    *
-    * We need to re-format the data to have form:
-    *   [
-    *       {
-    *           title: string,
-    *           data: [
-    *               {
-    *                   name: string,
-    *                   price: int,
-    *                   category: string,
-    *                   uri: string,
-    *                   description: string
-    *               },
-    *               ...
-    *           ]
-    *       },
-    *       ...
-    *   ]
-    *
-    * to pass to `sections` prop of SectionList
-    */
-
-    const [items, setItems] = useState([]);
+    const itemContext = useContext(ItemContext);
 
     useEffect(() => {
-        const getItemList = async () => {
-            const res = await axios.get(url + '/items');
-            return res.data;
-        }
 
-        getItemList()
-            .then(data => { setItems(data.data); })
-            .catch(error => { console.error(error); });
     }, []);
 
     function formatData(data) {
@@ -83,25 +41,31 @@ export default function ItemListScreen(props) {
     return (
         <View style={styles.container}>
             <SectionList
-                sections={formatData(items)}
+                sections={formatData(itemContext.items)}
                 renderItem={({ item }) => <ItemComponent {...item} navigation={props.navigation} />}
                 renderSectionHeader={({ section }) => <HeaderComponent section={section} />}
-                keyExtractor={item => item.name}
+                keyExtractor={item => item._id}
                 showsVerticalScrollIndicator={false}
             ></SectionList>
         </View>
     );
 }
 
-ItemListScreen.navigationOptions = () => {
+ItemListScreen.navigationOptions = ({ navigation }) => {
     return {
-        headerShown: false
+        headerRight: (
+            <Ionicons
+            name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
+            style={{ marginRight: 20 }}
+            size={35}
+            onPress={() => { navigation.navigate('CartScreen'); }}
+            ></Ionicons>
+        )
     };
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight
+        flex: 1
     }
 });

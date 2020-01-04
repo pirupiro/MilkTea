@@ -15,6 +15,7 @@ class ItemController {
         itemAccessor.insert(item)
             .then(item => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Thêm sản phẩm mới thành công',
                     data: item
                 });
@@ -29,6 +30,7 @@ class ItemController {
         itemAccessor.getAll()
             .then(items => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Truy xuất danh sách sản phẩm thành công',
                     data: items
                 });
@@ -48,11 +50,13 @@ class ItemController {
             .then(item => {
                 if (item) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Cập nhật sản phẩm thành công',
                         data: item
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Sản phẩm không tồn tại'
                     });
                 }
@@ -70,11 +74,13 @@ class ItemController {
             .then(item => {
                 if (item) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Xóa sản phẩm thành công',
                         data: item
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Sản phẩm không tồn tại'
                     });
                 }

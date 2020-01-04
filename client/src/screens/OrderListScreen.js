@@ -10,15 +10,15 @@ import orders from '../../data/orders';
 import UserContext from '../context/UserContext';
 
 export default function OrderListScreen(props) {
-    const user = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const status = props.navigation.state.routeName.toLowerCase();
     let filteredOrders = orders.filter((order, index) => order.status === status);
 
     useEffect(() => {
+        // Fetch api to get all orders with the given status.
+    }, []);
 
-    });
-
-    if (user.loggedIn) {
+    if (userContext.loggedIn) {
         if (filteredOrders && filteredOrders.length > 0) {
             return (
                 <View style={styles.container}>
@@ -58,11 +58,12 @@ function ToLogin(props) {
                     marginTop: 20,
                     paddingHorizontal: 20,
                     paddingVertical: 10,
-                    backgroundColor: 'rgb(22, 160, 133)'
+                    backgroundColor: 'rgb(52, 73, 94)',
+                    borderRadius: 5
                 }}
                 onPress={() => { props.navigation.navigate('InfoStack'); }}
             >
-                <Text style={{ fontSize: 20 }}>LOG IN</Text>
+                <Text style={{ fontSize: 20, color: 'white' }}>LOG IN</Text>
             </TouchableHighlight>
         </View>
     );

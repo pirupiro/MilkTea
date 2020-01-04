@@ -9,6 +9,7 @@ class CategoryController {
         categoryAccessor.insert(category)
             .then(category => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Tạo mới loại sản phẩm thành công',
                     data: category
                 });
@@ -23,6 +24,7 @@ class CategoryController {
         categoryAccessor.getAll()
             .then(categories => {
                 return res.status(200).json({
+                    error: false,
                     message: 'Truy xuất danh sách loại sản phẩm thành công',
                     data: categories
                 });
@@ -42,11 +44,13 @@ class CategoryController {
             .then(category => {
                 if (category) {
                     return res.status(200).json({
+                        error: false,
                         message: 'Đổi tên loại sản phẩm thành công',
                         data: category
                     });
                 } else {
-                    return res.status(400).json({
+                    return res.status(200).json({
+                        error: true,
                         message: 'Loại sản phẩm không tồn tại',
                     });
                 }

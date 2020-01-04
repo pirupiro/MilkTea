@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import OrderTab from './OrderTab';
-import OrderScreen from '../screens/OrderScreen';
+import OrderDetailScreen from '../screens/OrderDetailScreen';
 import { createStackNavigator } from 'react-navigation-stack';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -11,10 +11,10 @@ const OrderStack = createStackNavigator({
             headerShown: false
         }
     },
-    OrderScreen: {
-        screen: OrderScreen,
+    OrderDetailScreen: {
+        screen: OrderDetailScreen,
         navigationOptions: {
-            headerTransparent: true
+            headerTitle: 'Chi tiết đơn hàng'
         }
     }
 }, {

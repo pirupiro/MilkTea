@@ -8,13 +8,13 @@ import {
     Keyboard,
     TextInput,
     TouchableOpacity,
-    TouchableHighlight,
     Text,
     Dimensions,
-    Platform
+    AsyncStorage
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import UserContext from '../context/UserContext';
+import axios from 'axios';
+import { getUserURI } from '../Networking';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -26,14 +26,37 @@ export default function LogInScreen(props) {
     // Use refs
     const passwordRef = useRef();
 
-    const user = useContext(UserContext);
-
-    useEffect(() => {
-
-    }, [user.loggedIn]);
+    const userContext = useContext(UserContext);
 
     function onLogInPress() {
-        user.setLoggedIn(true);
+        async function logIn() {
+            const res = await axios.post(getUserURI() + 'login', { username, password });
+            return res.data;
+        }
+
+        logIn()
+            .then(data => {
+                if (data.error) {
+                    alert(data.message);
+                } else {
+                    const user = data.data;
+                    userContext.setId(user._id);
+                    userContext.setPassword(user.password);
+                    userContext.setName(user.name);
+                    userContext.setGender(user.gender);
+                    userContext.setPhone(user.phone);
+                    userContext.setAddress(user.address);
+                    userContext.setLoggedIn(true);
+
+                    AsyncStorage.setItem('user', JSON.stringify(user))
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     };
 
     return (
@@ -92,23 +115,6 @@ export default function LogInScreen(props) {
                     </Text>
                 </View>
             </TouchableWithoutFeedback>
-
-            {/* {
-                fromRoute && ['ItemListScreen', 'ItemScreen'].includes(fromRoute) &&
-                (
-                    <TouchableHighlight
-                        style={styles.goBackButton}
-                        underlayColor='rgba(0, 0, 0, 0.25)'
-                        onPress={() => { props.navigation.goBack(); }}
-                    >
-                        <Ionicons
-                            name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
-                            size={25}
-                            color='white'
-                        ></Ionicons>
-                    </TouchableHighlight>
-                )
-            } */}
         </KeyboardAvoidingView>
     );
 }
@@ -138,7 +144,8 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: 'rgb(39, 174, 96)',
         justifyContent: 'center',
-        marginVertical: 15
+        marginVertical: 15,
+        borderRadius: 20
     },
     loginText: {
         fontSize: 18,
@@ -148,13 +155,5 @@ const styles = StyleSheet.create({
     signUpLabel: {
         color: 'rgb(52, 152, 219)',
         fontSize: 15
-    },
-    goBackButton: {
-        position: 'absolute',
-        top: 30,
-        left: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 30
     }
 });

@@ -10,6 +10,8 @@ import {
 import PickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import UserContext from '../context/UserContext';
+import axios from 'axios';
+import { getUserURI } from '../Networking';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -30,17 +32,9 @@ export default function SignUpScreen(props) {
     const phoneRef = useRef();
     const addressRef = useRef();
 
-    const user = useContext(UserContext);
-
-    useEffect(() => {
-        if (user.loggedIn) {
-            props.navigation.goBack(null);
-        }
-    });
-
     function validate() {
         const wordPattern = /^[a-zA-z0-9]+$/;
-        const numberPatter = /^\d+$/;
+        const numberPattern = /^\d+$/;
 
         if (!username || !password || !confirm || !name || !phone || !address)
             return {
@@ -57,16 +51,16 @@ export default function SignUpScreen(props) {
         if (!wordPattern.test(password) || !wordPattern.test(confirm))
             return {
                 error: true,
-                message: 'Password không hợp lệ, chỉ được sử dụng các ký tự a-z, A-Z, 0-9'
+                message: 'Mật khẩu không hợp lệ, chỉ được sử dụng các ký tự a-z, A-Z, 0-9'
             };
 
-        if (!numberPatter.test(phone))
+        if (!numberPattern.test(phone))
             return {
                 error: true,
                 message: 'Số điện thoại không hợp lệ, chỉ được sử dụng các ký tự số'
             };
 
-        if (phone !== confirm)
+        if (password !== confirm)
             return {
                 error: true,
                 message: 'Mật khẩu và xác nhận không trùng khớp'
@@ -76,13 +70,29 @@ export default function SignUpScreen(props) {
     }
 
     function onSignUpPress() {
-        console.log(username, password, confirm, name, gender, phone, address);
         const validation = validate();
 
         if (validation.error) {
-            console.log(validation.message);
+            alert(validation.message);
         } else {
-            props.navigation.goBack();
+            async function signUp() {
+                const userData = { username, password, name, gender, phone, address };
+                const res = await axios.post(getUserURI(), userData);
+                return res.data;
+            }
+
+            signUp()
+                .then(data => {
+                    if (data.error) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                        props.navigation.goBack();
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     };
 
@@ -227,7 +237,6 @@ SignUpScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         alignItems: 'center'
     },
     section: {
