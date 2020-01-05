@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     Dimensions,
@@ -6,16 +6,34 @@ import {
     Text,
     View
 } from 'react-native';
-import orderDetails from '../../data/orderDetails';
+// import orderDetails from '../../data/orderDetails';
 import OrderDetailComponent from '../components/OrderDetailComponent';
+import { getOrderURI } from '../Networking';
+import Axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function OrderScreen(props) {
-    const { weekDay, date, time, totalPrice } = props.navigation.state.params;
+export default function OrderDetailScreen(props) {
+    const { id, weekDay, date, time, totalPrice } = props.navigation.state.params;
+    const [orderDetails, setOrderDetails] = useState([]);
 
     useEffect(() => {
-        // User order id to fetch api and get order detail here.
+        async function getOrderDetail() {
+            const res = await Axios.get(getOrderURI() + '/' + id);
+            return res.data;
+        }
+
+        getOrderDetail()
+            .then(data => {
+                if (data.error) {
+                    alert(data.message);
+                } else {
+                    setOrderDetails(data.data.details);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }, []);
 
     return (
@@ -24,7 +42,7 @@ export default function OrderScreen(props) {
             <Text style={styles.date}>{weekDay + ', ngày ' + date}</Text>
             <FlatList
                 data={orderDetails}
-                keyExtractor={item => item._id.toString()}
+                keyExtractor={item => item._id}
                 renderItem={({ item, index }) => <OrderDetailComponent {...item} index={index} />}
             ></FlatList>
             <View style={styles.right}>
@@ -40,12 +58,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     time: {
-        fontSize: 20,
+        fontSize: 18,
         marginTop: 10,
         fontWeight: 'bold'
     },
     date: {
-        fontSize: 20,
+        fontSize: 18,
         marginBottom: 10,
         color: 'rgb(10, 61, 98)',
         fontWeight: 'bold'
@@ -61,7 +79,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row-reverse'
     },
     totalPrice: {
-        fontSize: 22,
+        fontSize: 20,
         color: 'rgb(159, 35, 93)',
         fontWeight: 'bold'
     }

@@ -13,8 +13,8 @@ import {
     AsyncStorage
 } from 'react-native';
 import UserContext from '../context/UserContext';
-import axios from 'axios';
 import { getUserURI } from '../Networking';
+import Axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -30,7 +30,7 @@ export default function LogInScreen(props) {
 
     function onLogInPress() {
         async function logIn() {
-            const res = await axios.post(getUserURI() + 'login', { username, password });
+            const res = await Axios.post(getUserURI() + '/login', { username, password });
             return res.data;
         }
 

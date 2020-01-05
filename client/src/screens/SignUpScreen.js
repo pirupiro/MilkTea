@@ -10,7 +10,7 @@ import {
 import PickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import UserContext from '../context/UserContext';
-import axios from 'axios';
+import Axios from 'axios';
 import { getUserURI } from '../Networking';
 
 const windowWidth = Dimensions.get('window').width;
@@ -77,7 +77,7 @@ export default function SignUpScreen(props) {
         } else {
             async function signUp() {
                 const userData = { username, password, name, gender, phone, address };
-                const res = await axios.post(getUserURI(), userData);
+                const res = await Axios.post(getUserURI(), userData);
                 return res.data;
             }
 

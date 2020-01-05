@@ -6,15 +6,20 @@ import {
     Platform,
     AsyncStorage,
     Text,
-    Dimensions
+    Dimensions,
+    Alert
 } from 'react-native';
-import { MaterialCommunityIcons, Ionions } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import ItemContext from '../context/ItemContext';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function CartItemComponent(props) {
     const itemContext = useContext(ItemContext);
+
+    function formatNumber(number) {
+        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
 
     function onAddPress() {
         let cartItems = itemContext.cartItems.slice();
@@ -37,56 +42,76 @@ export default function CartItemComponent(props) {
     function onMinusPress() {
         let cartItems = itemContext.cartItems.slice();
         const index = cartItems.map(item => item._id).indexOf(props._id);
-        cartItems[index].quantity--;
 
-        async function decrease() {
-            await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+        if (cartItems[index].quantity > 1) {
+            cartItems[index].quantity--;
+
+            async function decrease() {
+                await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+            }
+
+            decrease()
+                .then(() => {
+                    itemContext.setCartItems(cartItems);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
-
-        decrease()
-            .then(() => {
-                itemContext.setCartItems(cartItems);
-            })
-            .catch(error => {
-                console.error(error);
-            });
     }
 
     function onCartPress() {
-        const cartItems = itemContext.cartItems.filter(item => item._id !== props._id);
+        Alert.alert(
+            `Bỏ ${props.name} khỏi giỏ hàng ?`, null,
+            [
+                {
+                    text: 'Vâng',
+                    onPress: () => {
+                        const cartItems = itemContext.cartItems.filter(item => item._id !== props._id);
 
-        async function removeItem() {
-            await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
-        }
+                        async function removeItem() {
+                            await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+                        }
 
-        removeItem()
-            .then(() => {
-                itemContext.setCartItems(cartItems);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                        removeItem()
+                            .then(() => {
+                                itemContext.setCartItems(cartItems);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                },
+                {
+                    text: 'Không',
+                    style: 'cancel'
+                }
+            ]
+        );
+
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.info}>
                 <Text style={styles.name}>{props.name}</Text>
-                <Text style={styles.price}>{props.price}</Text>
+                <Text style={styles.price}>{formatNumber(props.unitPrice)}đ</Text>
             </View>
 
             <View style={styles.counter}>
-                <Ionions
-                    name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
-                    size={15}
-                    onPress={onAddPress}
-                ></Ionions>
-                <Text>{props.quantity}</Text>
-                <Ionions
-                    name={Platform.OS === 'ios' ? 'ios-remove-circle-outline' : 'md-remove-circle-outline'}
-                    size={15}
+                <Ionicons
+                    name={Platform.OS === 'ios' ? 'ios-remove' : 'md-remove'}
+                    size={30}
+                    color='rgb(181, 52, 113)'
                     onPress={onMinusPress}
-                ></Ionions>
+                ></Ionicons>
+                <Text style={{fontSize: 18}}>{props.quantity}</Text>
+                <Ionicons
+                    name={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
+                    size={30}
+                    color='rgb(181, 52, 113)'
+                    onPress={onAddPress}
+                ></Ionicons>
             </View>
 
             <TouchableOpacity
@@ -96,7 +121,7 @@ export default function CartItemComponent(props) {
             >
                 <MaterialCommunityIcons
                     name='cart-arrow-up'
-                    size={30}
+                    size={25}
                     color='black'
                 ></MaterialCommunityIcons>
             </TouchableOpacity>
@@ -106,22 +131,34 @@ export default function CartItemComponent(props) {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth,
+        width: windowWidth - 5,
+        paddingLeft: 10,
+        height: 80,
         flexDirection: 'row',
-        height: 120
+        borderColor: 'rgb(87, 96, 111)',
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderBottomWidth: 2,
+        borderRadius: 10,
+        marginBottom: 2.5
     },
     info: {
-        flex: 50
+        flex: 50,
+        justifyContent: 'center'
     },
     name: {
         fontSize: 18,
-        fontWeight: 'bold'
     },
     price: {
-        fontSize: 18
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'rgb(30, 55, 153)'
     },
     counter: {
-        flex: 35
+        flex: 35,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
     },
     quantity: {
         fontSize: 18
@@ -132,7 +169,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgb(210, 211, 215)',
         borderRadius: 5,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15
+        borderBottomRightRadius: 10,
+        borderTopRightRadius: 10
     }
 });

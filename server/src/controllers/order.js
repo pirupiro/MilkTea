@@ -29,7 +29,7 @@ class OrderController {
     }
 
     getAllOrdersByStatus(req, res) {
-        const { status, userId } = req.body;
+        const { status, userId } = req.query;
 
         if (userId) {
             orderAccessor.getAllByStatusWithUserId(status, userId)

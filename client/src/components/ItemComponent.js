@@ -46,7 +46,7 @@ export default function ItemComponent(props) {
                         quantity: 1
                     };
 
-                    cartItems = itemContext.cartItems.concat(newItem);
+                    cartItems.push(newItem);
                 } else { // Increase quantity of the selected item by 1
                     cartItems[index].quantity++;
                 }
@@ -67,7 +67,7 @@ export default function ItemComponent(props) {
     }
 
     function onItemPress() {
-        props.navigation.navigate('ItemScreen', { ...props, onCartPress, formatNumber });
+        props.navigation.navigate('ItemScreen', { ...props, formatNumber });
     };
 
     return (
@@ -95,7 +95,7 @@ export default function ItemComponent(props) {
             >
                 <MaterialCommunityIcons
                     name='cart-arrow-down'
-                    size={30}
+                    size={25}
                     color='black'
                 ></MaterialCommunityIcons>
             </TouchableOpacity>

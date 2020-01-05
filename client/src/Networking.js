@@ -6,12 +6,16 @@ function getImageURI(image) {
     return `${url}/${image}`;
 }
 
-function getItemURI(id='') {
-    return `${url}/items/${id}`;
+function getItemURI() {
+    return `${url}/items`;
 }
 
-function getUserURI(id='') {
-    return `${url}/users/${id}`;
+function getUserURI() {
+    return `${url}/users`;
+}
+
+function getOrderURI() {
+    return `${url}/orders`;
 }
 
 export {
@@ -20,5 +24,6 @@ export {
     url,
     getImageURI,
     getItemURI,
-    getUserURI
+    getUserURI,
+    getOrderURI
 };

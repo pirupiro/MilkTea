@@ -4,7 +4,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const windowWidth = Dimensions.get('window').width;
 const numColumns = 2;
-const margin = 3;
+const margin = 2.5;
 
 export default function OrderComponent(props) {
     function formatNumber(number) {
@@ -12,14 +12,14 @@ export default function OrderComponent(props) {
     }
 
     function onOrderPress() {
-        props.navigation.navigate('OrderDetailScreen', { weekDay, date, time, totalPrice });
+        props.navigation.navigate('OrderDetailScreen', { id: props._id, weekDay, date, time, totalPrice });
     }
 
-    const numToWeekDay = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
-    const createdAt = props.createdAt;
+    const numToWeekDay = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+    const createdAt = new Date(props.createdAt);
     const totalPrice = formatNumber(props.totalPrice);
     const weekDay = numToWeekDay[createdAt.getDay()];
-    const date = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()}`;
+    const date = `${createdAt.getDate()}/${createdAt.getMonth() + 1}/${createdAt.getFullYear()}`;
     const time = `${createdAt.getHours()}:${createdAt.getMinutes()}:${createdAt.getSeconds()}`;
 
     return (

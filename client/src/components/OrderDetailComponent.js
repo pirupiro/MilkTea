@@ -7,18 +7,21 @@ import {
 } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
-const margin = windowWidth / 4;
 
 export default function OrderDetailComponent(props) {
+    function formatNumber(number) {
+        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
+
     const color = props.index % 2 ? styles.odd : styles.even;
 
     return (
         <View style={{ ...styles.container, ...color }}>
             <Text style={styles.name}>{props.name}</Text>
             <View style={styles.numberField}>
-                <Text style={[styles.number, styles.left]}>{props.unitPrice}đ</Text>
+                <Text style={[styles.number, styles.left]}>{formatNumber(props.unitPrice)}đ</Text>
                 <Text style={[styles.number, styles.center]}>x{props.quantity}</Text>
-                <Text style={[styles.number, styles.right]}>{props.totalPrice}đ</Text>
+                <Text style={[styles.number, styles.right]}>{formatNumber(props.totalPrice)}đ</Text>
             </View>
         </View>
     );
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     name: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'rgb(159, 35, 93)'
     },
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     number: {
-        fontSize: 20,
+        fontSize: 18,
         color: 'black'
     },
     left: {

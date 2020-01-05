@@ -1,38 +1,98 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
     TouchableHighlight,
     Text,
-    ScrollView
+    ScrollView,
+    Dimensions,
+    Alert,
+    AsyncStorage
 } from 'react-native';
-import ItemContext from '../context/ItemContext';
 import CartItemComponent from '../components/CartItemComponent';
+import ItemContext from '../context/ItemContext';
+import UserContext from '../context/UserContext';
+import Axios from 'axios';
+import { getOrderURI } from '../Networking';
+
+const windowWidth = Dimensions.get('window').width;
 
 export default function CartScreen(props) {
+    const userContext = useContext(UserContext);
     const itemContext = useContext(ItemContext);
-    console.log(itemContext.cartItems);
+    const [totalPrice, setTotalPrice] = useState(0);
 
-    function onPayPress() {
-
+    function formatNumber(number) {
+        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     }
 
-    if (itemContext.cartItems.length > 0) {
-        // const cartItemComponents = itemContext.cartItems.map(item => <CartItemComponent {...item} key={item._id} />);
-        // console.log(cartItemComponents);
-        return (
-            <View style={styles.container}>
-                {/* {cartItemComponents} */}
+    function onPayPress() {
+        Alert.alert(
+            'Thanh toán',
+            `Bạn muốn thanh toán đơn hàng này ?\nTổng giá trị đơn hàng là ${formatNumber(totalPrice)} đồng`,
+            [
+                {
+                    text: 'Vâng',
+                    onPress: () => {
+                        async function pay() {
+                            const data = {
+                                userId: userContext.id,
+                                name: userContext.name,
+                                phone: userContext.phone,
+                                address: userContext.address,
+                                details: itemContext.cartItems
+                            }
 
-                <Text>Tổng: {props.quantity * props.price}</Text>
+                            const res = await Axios.post(getOrderURI(), data);
+                            await AsyncStorage.removeItem('cartItems');
+                            return res.data;
+                        }
+
+                        pay()
+                            .then(data => {
+                                itemContext.setCartItems([]);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                },
+                {
+                    text: 'Không',
+                    style: 'cancel'
+                }
+            ]
+        );
+    }
+
+    useEffect(() => {
+        let totalPrice = 0;
+
+        for (item of itemContext.cartItems) {
+            totalPrice += item.unitPrice * item.quantity;
+        }
+
+        setTotalPrice(totalPrice);
+    });
+
+    if (itemContext.cartItems.length > 0) {
+        const cartItemComponents = itemContext.cartItems.map(item => <CartItemComponent {...item} key={item._id} />);
+        return (
+            <ScrollView
+                contentContainerStyle={styles.container}
+                showsVerticalScrollIndicator={false}
+            >
+                {cartItemComponents}
+
+                <Text style={styles.totalPrice}>Tổng: {formatNumber(totalPrice)}đ</Text>
 
                 <TouchableHighlight
                     style={styles.payButton}
                     onPress={onPayPress}
                 >
-                    <Text>THANH TOÁN</Text>
+                    <Text style={{ fontSize: 18, color: 'white' }}>THANH TOÁN</Text>
                 </TouchableHighlight>
-            </View>
+            </ScrollView>
         );
     } else {
         return (
@@ -68,10 +128,24 @@ CartScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center'
+        // flex: 1,
+        alignItems: 'center',
+        marginTop: 5
     },
-    button: {
+    totalPrice: {
+        marginTop: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'rgb(30, 55, 153)'
 
+    },
+    payButton: {
+        width: windowWidth * 0.8,
+        borderRadius: 5,
+        marginVertical: 20,
+        paddingVertical: 10,
+        backgroundColor: 'rgb(0, 184, 148)',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import UserContext from '../context/UserContext';
 import ItemContext from '../context/ItemContext';
-import axios from 'axios';
+import Axios from 'axios';
 import { getItemURI } from '../Networking';
 
 const windowWidth = Dimensions.get('window').width;
@@ -20,7 +20,7 @@ export default function Splash(props) {
     useEffect(() => {
         async function fetchData() {
             const [res, userData, cartItems] = await Promise.all([
-                axios.get(getItemURI()),
+                Axios.get(getItemURI()),
                 AsyncStorage.getItem('user'),
                 AsyncStorage.getItem('cartItems')
             ]);

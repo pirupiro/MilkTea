@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import UserContext from '../context/UserContext';
 import ItemContext from '../context/ItemContext';
 import { getUserURI } from '../Networking';
-import axios from 'axios';
+import Axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -90,7 +90,7 @@ export default function InfoScreen(props) {
                 const { id, name, gender, phone, address } = userContext;
                 const password = changePassword ? newPassword : userContext.password;
                 const userData = { name, password, gender, phone, address };
-                const res = await axios.put(getUserURI(id), userData);
+                const res = await Axios.put(getUserURI() + '/' + id, userData);
                 return res.data;
             }
 

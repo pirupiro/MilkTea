@@ -8,14 +8,14 @@ class OrderAccessor {
     getAllByStatus(status) {
         return OrderModel.find(
             { status },
-            { details: -1 }
+            { details: 0 }
         ).lean();
     }
 
     getAllByStatusWithUserId(status, userId) {
         return OrderModel.find(
             { status, userId },
-            { details: -1 }
+            { details: 0 }
         ).lean();
     }
 

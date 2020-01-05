@@ -57,7 +57,7 @@ ItemListScreen.navigationOptions = ({ navigation }) => {
             <Ionicons
             name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
             style={{ marginRight: 20 }}
-            size={35}
+            size={30}
             onPress={() => { navigation.navigate('CartScreen'); }}
             ></Ionicons>
         )
