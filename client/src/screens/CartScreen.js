@@ -100,17 +100,11 @@ export default function CartScreen(props) {
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'rgb(236, 240, 241)'
+                backgroundColor: 'rgb(248, 248, 248)'
             }}>
                 <Text style={{ fontSize: 20 }}>Hiện tại không có sản phẩm</Text>
                 <TouchableHighlight
-                    style={{
-                        marginTop: 20,
-                        paddingHorizontal: 20,
-                        paddingVertical: 10,
-                        backgroundColor: 'rgb(52, 73, 94)',
-                        borderRadius: 5
-                    }}
+                    style={styles.buyButton}
                     onPress={() => { props.navigation.navigate('ItemListScreen'); }}
                 >
                     <Text style={{ fontSize: 20, color: 'white' }}>MUA</Text>
@@ -128,7 +122,6 @@ CartScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         alignItems: 'center',
         marginTop: 5
     },
@@ -147,5 +140,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(0, 184, 148)',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    buyButton: {
+        marginTop: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: 'rgb(52, 73, 94)',
+        borderRadius: 5
     }
 });

@@ -14,6 +14,7 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import UserContext from '../context/UserContext';
 import ItemContext from '../context/ItemContext';
 import { getImageURI } from '../Networking';
+import CartIcon from '../components/CartIcon';
 
 const { width: windowWith } = Dimensions.get('window');
 
@@ -94,14 +95,7 @@ export default function ItemScreen(props) {
 ItemScreen.navigationOptions = ({ navigation }) => {
     return {
         headerTransparent: true,
-        headerRight: (
-            <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
-                style={{ marginRight: 20 }}
-                size={30}
-                onPress={() => { navigation.navigate('CartScreen'); }}
-            ></Ionicons>
-        )
+        headerRight: <CartIcon navigation={navigation} />
     };
 };
 

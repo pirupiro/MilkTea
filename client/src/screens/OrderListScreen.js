@@ -72,18 +72,10 @@ export default function OrderListScreen(props) {
                         !isLoading &&
                         (
                             <TouchableOpacity
-                                style={{
-                                    marginTop: 20,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                    backgroundColor: 'rgb(52, 73, 94)',
-                                    borderRadius: 5,
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
+                                style={styles.button}
                                 onPress={onRefresh}
                             >
-                                <Text style={{ fontSize: 20, color: 'white' }}>TẢI LẠI</Text>
+                                <Text style={styles.whiteText}>TẢI LẠI</Text>
                             </TouchableOpacity>
                         )
                     }
@@ -101,20 +93,14 @@ function ToLogin(props) {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'rgb(236, 240, 241)'
+            backgroundColor: 'rgb(248, 248, 248)'
         }}>
             <Text style={styles.text}>Đăng nhập để xem thông tin đơn hàng</Text>
             <TouchableOpacity
-                style={{
-                    marginTop: 20,
-                    paddingHorizontal: 30,
-                    paddingVertical: 10,
-                    backgroundColor: 'rgb(52, 73, 94)',
-                    borderRadius: 5
-                }}
+                style={styles.button}
                 onPress={() => { props.navigation.navigate('InfoStack'); }}
             >
-                <Text style={{ fontSize: 20, color: 'white' }}>LOG IN</Text>
+                <Text style={styles.whiteText}>LOG IN</Text>
             </TouchableOpacity>
         </View>
     );
@@ -127,9 +113,23 @@ const styles = StyleSheet.create({
     blank: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'rgb(248, 248, 248)'
     },
     text: {
         fontSize: 20,
+    },
+    button: {
+        marginTop: 20,
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+        backgroundColor: 'rgb(52, 73, 94)',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    whiteText: {
+        fontSize: 20,
+        color: 'white'
     }
 });

@@ -135,153 +135,150 @@ export default function InfoScreen(props) {
         <KeyboardAwareScrollView
             contentContainerStyle={styles.container}
             enableOnAndroid
-            extraScrollHeight={100}
         >
-            <View style={styles.container}>
-                <View style={styles.section}>
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Full name</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Enter your full name'
-                            autoCorrect={false}
-                            autoCapitalize='words'
-                            onSubmitEditing={() => { phoneRef.current.focus() }}
-                            returnKeyType='next'
-                            onChangeText={text => { userContext.setName(text); }}
-                            value={userContext.name}
-                        ></TextInput>
+            <View style={styles.section}>
+                <View style={styles.field}>
+                    <Text style={styles.label}>Full name</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Enter your full name'
+                        autoCorrect={false}
+                        autoCapitalize='words'
+                        onSubmitEditing={() => { phoneRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { userContext.setName(text); }}
+                        value={userContext.name}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Gender</Text>
+                    <View style={[styles.input, { justifyContent: 'center' }]}>
+                        <PickerSelect
+                            placeholder={{}}
+                            value={userContext.gender}
+                            onValueChange={(value, index) => { userContext.setGender(value); }}
+                            items={[
+                                { label: 'Male', value: 'male' },
+                                { label: 'Female', value: 'female' },
+                                { label: 'Other', value: 'other' },
+                            ]}
+                        ></PickerSelect>
                     </View>
+                </View>
 
-                    <View style={styles.separator}></View>
+                <View style={styles.separator}></View>
 
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Gender</Text>
-                        <View style={[styles.input, { justifyContent: 'center' }]}>
-                            <PickerSelect
-                                placeholder={{}}
-                                value={userContext.gender}
-                                onValueChange={(value, index) => { userContext.setGender(value); }}
-                                items={[
-                                    { label: 'Male', value: 'male' },
-                                    { label: 'Female', value: 'female' },
-                                    { label: 'Other', value: 'other' },
-                                ]}
-                            ></PickerSelect>
+                <View style={styles.field}>
+                    <Text style={styles.label}>Phone</Text>
+                    <TextInput
+                        ref={phoneRef}
+                        style={styles.input}
+                        placeholder='Enter your phone number'
+                        autoCorrect={false}
+                        keyboardType='number-pad'
+                        onSubmitEditing={() => { addressRef.current.focus() }}
+                        returnKeyType='next'
+                        onChangeText={text => { userContext.setPhone(text); }}
+                        value={userContext.phone}
+                    ></TextInput>
+                </View>
+
+                <View style={styles.separator}></View>
+
+                <View style={styles.field}>
+                    <Text style={styles.label}>Address</Text>
+                    <TextInput
+                        ref={addressRef}
+                        style={styles.input}
+                        placeholder='Enter your address'
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        onChangeText={text => { userContext.setAddress(text); }}
+                        value={userContext.address}
+                    ></TextInput>
+                </View>
+            </View>
+
+            <View style={styles.switch}>
+                <Text style={{ fontSize: 16, color: 'rgb(237, 76, 103)' }}>
+                    Change password ?
+                </Text>
+                <Switch
+                    onValueChange={() => { setChangePassword(!changePassword); }}
+                    value={changePassword}
+                ></Switch>
+            </View>
+
+            {
+                changePassword &&
+                (
+                    <View style={styles.section}>
+                        <View style={styles.field}>
+                            <Text style={styles.label}>Current</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder='Enter your current password'
+                                autoCorrect={false}
+                                autoCapitalize='none'
+                                onSubmitEditing={() => { newPasswordRef.current.focus() }}
+                                returnKeyType='next'
+                                secureTextEntry
+                                onChangeText={text => { setPassword(text); }}
+                            ></TextInput>
+                        </View>
+
+                        <View style={styles.separator}></View>
+
+                        <View style={styles.field}>
+                            <Text style={styles.label}>New</Text>
+                            <TextInput
+                                ref={newPasswordRef}
+                                style={styles.input}
+                                placeholder='Enter your new password'
+                                autoCorrect={false}
+                                autoCapitalize='none'
+                                onSubmitEditing={() => { confirmRef.current.focus() }}
+                                returnKeyType='next'
+                                secureTextEntry
+                                onChangeText={text => { setNewPassword(text); }}
+                            ></TextInput>
+                        </View>
+
+                        <View style={styles.separator}></View>
+
+                        <View style={styles.field}>
+                            <Text style={styles.label}>Confirm</Text>
+                            <TextInput
+                                ref={confirmRef}
+                                style={styles.input}
+                                placeholder='Confirm your new password'
+                                autoCorrect={false}
+                                autoCapitalize='none'
+                                secureTextEntry
+                                onChangeText={text => { setConfirm(text); }}
+                            ></TextInput>
                         </View>
                     </View>
+                )
+            }
 
-                    <View style={styles.separator}></View>
+            <View style={styles.buttonField}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onSavePress}
+                >
+                    <Text style={styles.buttonText}>SAVE</Text>
+                </TouchableOpacity>
 
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Phone</Text>
-                        <TextInput
-                            ref={phoneRef}
-                            style={styles.input}
-                            placeholder='Enter your phone number'
-                            autoCorrect={false}
-                            keyboardType='number-pad'
-                            onSubmitEditing={() => { addressRef.current.focus() }}
-                            returnKeyType='next'
-                            onChangeText={text => { userContext.setPhone(text); }}
-                            value={userContext.phone}
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.separator}></View>
-
-                    <View style={styles.field}>
-                        <Text style={styles.label}>Address</Text>
-                        <TextInput
-                            ref={addressRef}
-                            style={styles.input}
-                            placeholder='Enter your address'
-                            autoCorrect={false}
-                            autoCapitalize='none'
-                            onChangeText={text => { userContext.setAddress(text); }}
-                            value={userContext.address}
-                        ></TextInput>
-                    </View>
-                </View>
-
-                <View style={styles.switch}>
-                    <Text style={{ fontSize: 16, color: 'rgb(237, 76, 103)' }}>
-                        Change password ?
-                    </Text>
-                    <Switch
-                        onValueChange={() => { setChangePassword(!changePassword); }}
-                        value={changePassword}
-                    ></Switch>
-                </View>
-
-                {
-                    changePassword &&
-                    (
-                        <View style={styles.section}>
-                            <View style={styles.field}>
-                                <Text style={styles.label}>Current</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder='Enter your current password'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    onSubmitEditing={() => { newPasswordRef.current.focus() }}
-                                    returnKeyType='next'
-                                    secureTextEntry
-                                    onChangeText={text => { setPassword(text); }}
-                                ></TextInput>
-                            </View>
-
-                            <View style={styles.separator}></View>
-
-                            <View style={styles.field}>
-                                <Text style={styles.label}>New</Text>
-                                <TextInput
-                                    ref={newPasswordRef}
-                                    style={styles.input}
-                                    placeholder='Enter your new password'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    onSubmitEditing={() => { confirmRef.current.focus() }}
-                                    returnKeyType='next'
-                                    secureTextEntry
-                                    onChangeText={text => { setNewPassword(text); }}
-                                ></TextInput>
-                            </View>
-
-                            <View style={styles.separator}></View>
-
-                            <View style={styles.field}>
-                                <Text style={styles.label}>Confirm</Text>
-                                <TextInput
-                                    ref={confirmRef}
-                                    style={styles.input}
-                                    placeholder='Confirm your new password'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    secureTextEntry
-                                    onChangeText={text => { setConfirm(text); }}
-                                ></TextInput>
-                            </View>
-                        </View>
-                    )
-                }
-
-                <View style={styles.buttonField}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onSavePress}
-                    >
-                        <Text style={styles.buttonText}>SAVE</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onLogOutPress}
-                    >
-                        <Text style={styles.buttonText}>LOG OUT</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onLogOutPress}
+                >
+                    <Text style={styles.buttonText}>LOG OUT</Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAwareScrollView>
     );

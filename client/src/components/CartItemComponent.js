@@ -99,19 +99,30 @@ export default function CartItemComponent(props) {
             </View>
 
             <View style={styles.counter}>
-                <Ionicons
-                    name={Platform.OS === 'ios' ? 'ios-remove' : 'md-remove'}
-                    size={30}
-                    color='rgb(181, 52, 113)'
+                <TouchableOpacity
+                    style={{ padding: 10 }}
                     onPress={onMinusPress}
-                ></Ionicons>
-                <Text style={{fontSize: 18}}>{props.quantity}</Text>
-                <Ionicons
-                    name={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
-                    size={30}
-                    color='rgb(181, 52, 113)'
+                >
+                    <Ionicons
+                        name={Platform.OS === 'ios' ? 'ios-remove-circle' : 'md-remove-circle'}
+                        size={25}
+                        color='rgb(181, 52, 113)'
+                        onPress={onMinusPress}
+                    ></Ionicons>
+                </TouchableOpacity>
+
+                <Text style={{ fontSize: 18 }}>{props.quantity}</Text>
+
+                <TouchableOpacity
+                    style={{ padding: 10 }}
                     onPress={onAddPress}
-                ></Ionicons>
+                >
+                    <Ionicons
+                        name={Platform.OS === 'ios' ? 'ios-add-circle' : 'md-add-circle'}
+                        size={25}
+                        color='rgb(181, 52, 113)'
+                    ></Ionicons>
+                </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -134,8 +145,9 @@ const styles = StyleSheet.create({
         width: windowWidth - 5,
         paddingLeft: 10,
         height: 80,
+        backgroundColor: 'white',
         flexDirection: 'row',
-        borderColor: 'rgb(87, 96, 111)',
+        borderColor: 'rgb(127, 136, 151)',
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderBottomWidth: 2,

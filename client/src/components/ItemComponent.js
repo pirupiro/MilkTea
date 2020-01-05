@@ -106,9 +106,10 @@ export default function ItemComponent(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'center',
-        borderBottomWidth: 3,
+        borderBottomWidth: 2,
         borderLeftWidth: 1,
         borderRightWidth: 1,
         borderColor: 'rgb(209, 204, 192)',

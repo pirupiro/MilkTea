@@ -50,10 +50,8 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 15,
         borderColor: 'rgb(199, 194, 182)',
-        borderLeftWidth: 1.5,
-        borderRightWidth: 1.5,
-        borderBottomWidth: 3,
-        borderTopWidth: 1.5
+        borderWidth: 1.5,
+        borderBottomWidth: 3
     },
     totalPrice: {
         fontSize: 22,

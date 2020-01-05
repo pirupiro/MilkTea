@@ -4,6 +4,6 @@ import InfoScreen from './InfoScreen';
 import UserContext from '../context/UserContext';
 
 export default function Switch(props) {
-    const user = useContext(UserContext);
-    return user.loggedIn ? <InfoScreen navigation={props.navigation} /> : <LogInScreen navigation={props.navigation} />;
+    const userContext = useContext(UserContext);
+    return userContext.loggedIn ? <InfoScreen navigation={props.navigation} /> : <LogInScreen navigation={props.navigation} />;
 }

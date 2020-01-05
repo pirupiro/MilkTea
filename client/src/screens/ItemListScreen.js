@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ItemComponent from '../components/ItemComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import ItemContext from '../context/ItemContext';
+import CartIcon from '../components/CartIcon';
 
 export default function ItemListScreen(props) {
     const itemContext = useContext(ItemContext);
@@ -53,19 +54,14 @@ export default function ItemListScreen(props) {
 
 ItemListScreen.navigationOptions = ({ navigation }) => {
     return {
-        headerRight: (
-            <Ionicons
-            name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
-            style={{ marginRight: 20 }}
-            size={30}
-            onPress={() => { navigation.navigate('CartScreen'); }}
-            ></Ionicons>
-        )
+        headerRight: <CartIcon navigation={navigation} />
     };
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        paddingTop: 5,
+        backgroundColor: 'rgb(248, 248, 248)'
     }
 });
