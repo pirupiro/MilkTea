@@ -25,7 +25,7 @@ export default function CartIcon(props) {
             {
                 itemContext.cartItems.length > 0 &&
                 (
-                    <View style={styles.icon}>
+                    <View style={styles.badge}>
                         <Text style={styles.quantiy}>{itemContext.cartItems.length}</Text>
                     </View>
                 )
@@ -35,16 +35,16 @@ export default function CartIcon(props) {
 }
 
 const styles = StyleSheet.create({
-    icon: {
-        width: 20,
+    badge: {
+        width: 22,
         height: 20,
         backgroundColor: 'rgb(106, 176, 76)',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: 11,
         position: 'absolute',
         top: -6,
-        left: -6
+        left: -8
     },
     quantiy: {
         fontSize: 12,

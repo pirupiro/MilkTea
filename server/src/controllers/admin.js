@@ -28,6 +28,37 @@ class AdminController {
         }
     }
 
+    logIn(req, res) {
+        const { username, password } = req.body;
+
+        adminAccessor.getByUsername(username)
+            .then(admin => {
+                if (admin) {
+                    if (admin.password === password) {
+                        return res.status(200).json({
+                            error: false,
+                            message: 'Đăng nhập thành công',
+                            data: admin
+                        });
+                    } else {
+                        return res.status(200).json({
+                            error: true,
+                            message: 'Mật khẩu không chính xác',
+                        });
+                    }
+                } else {
+                    return res.status(200).json({
+                        error: true,
+                        message: 'Tài khoản không tồn tại',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return res.status(500).end();
+            });
+    }
+
     getAllAdmins(req, res) {
         adminAccessor.getAll()
             .then(admins => {

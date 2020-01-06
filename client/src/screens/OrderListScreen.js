@@ -108,7 +108,8 @@ function ToLogin(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        // backgroundColor: 'rgb(248, 248, 248)'
     },
     blank: {
         flex: 1,

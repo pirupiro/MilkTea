@@ -1,21 +1,24 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
     SectionList,
-    Platform
+    InteractionManager
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import ItemComponent from '../components/ItemComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import ItemContext from '../context/ItemContext';
 import CartIcon from '../components/CartIcon';
+import SearchBar from '../components/SearchBar';
 
 export default function ItemListScreen(props) {
+    const [searchStr, setSearchStr] = useState('');
     const itemContext = useContext(ItemContext);
 
     useEffect(() => {
-
+        InteractionManager.runAfterInteractions(() => {
+            props.navigation.setParams({ searchStr, setSearchStr });
+        });
     }, []);
 
     function formatData(data) {
@@ -23,16 +26,18 @@ export default function ItemListScreen(props) {
         let titles = [];
 
         for (item of data) {
-            let index = titles.indexOf(item.category);
+            if (item.name.toLowerCase().includes(searchStr.toLowerCase())) {
+                let index = titles.indexOf(item.category);
 
-            if (index < 0) {
-                formattedData.push({
-                    title: item.category,
-                    data: [{ ...item }]
-                });
-                titles.push(item.category);
-            } else {
-                formattedData[index].data.push({ ...item });
+                if (index < 0) {
+                    formattedData.push({
+                        title: item.category,
+                        data: [{ ...item }]
+                    });
+                    titles.push(item.category);
+                } else {
+                    formattedData[index].data.push({ ...item });
+                }
             }
         }
 
@@ -54,6 +59,7 @@ export default function ItemListScreen(props) {
 
 ItemListScreen.navigationOptions = ({ navigation }) => {
     return {
+        headerTitle: <SearchBar {...navigation.state.params} />,
         headerRight: <CartIcon navigation={navigation} />
     };
 }
