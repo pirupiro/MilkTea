@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import OrderTab from './OrderTab';
 import OrderDetailScreen from '../screens/OrderDetailScreen';
 import { createStackNavigator } from 'react-navigation-stack';
-import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const OrderStack = createStackNavigator({
     OrderTab: {
@@ -20,11 +20,11 @@ const OrderStack = createStackNavigator({
 }, {
     navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
-            <MaterialIcons
+            <FontAwesome5
                 name='receipt'
                 size={30}
                 color={tintColor}
-            ></MaterialIcons>
+            ></FontAwesome5>
         )
     }
 });

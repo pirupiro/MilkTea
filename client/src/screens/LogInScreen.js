@@ -28,35 +28,55 @@ export default function LogInScreen(props) {
 
     const userContext = useContext(UserContext);
 
-    function onLogInPress() {
-        async function logIn() {
-            const res = await Axios.post(getUserURI() + '/login', { username, password });
-            return res.data;
+    function validate() {
+        if (!username || !password) {
+            return {
+                error: true,
+                message: 'Vui lòng nhập tài khoản và mật khẩu'
+            };
         }
+        else {
+            return {
+                error: false
+            };
+        }
+    }
 
-        logIn()
-            .then(data => {
-                if (data.error) {
-                    alert(data.message);
-                } else {
-                    const user = data.data;
-                    userContext.setId(user._id);
-                    userContext.setPassword(user.password);
-                    userContext.setName(user.name);
-                    userContext.setGender(user.gender);
-                    userContext.setPhone(user.phone);
-                    userContext.setAddress(user.address);
-                    userContext.setLoggedIn(true);
+    function onLogInPress() {
+        const validation = validate();
 
-                    AsyncStorage.setItem('user', JSON.stringify(user))
-                        .catch(error => {
-                            console.error(error);
-                        });
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        if (validation.error) {
+            alert(validation.message);
+        } else {
+            async function logIn() {
+                const res = await Axios.post(getUserURI() + '/login', { username, password });
+                return res.data;
+            }
+
+            logIn()
+                .then(data => {
+                    if (data.error) {
+                        alert(data.message);
+                    } else {
+                        const user = data.data;
+                        userContext.setId(user._id);
+                        userContext.setPassword(user.password);
+                        userContext.setName(user.name);
+                        userContext.setGender(user.gender);
+                        userContext.setPhone(user.phone);
+                        userContext.setAddress(user.address);
+                        userContext.setLoggedIn(true);
+
+                        AsyncStorage.setItem('user', JSON.stringify(user))
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     };
 
     return (

@@ -278,7 +278,8 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: 'rgb(39, 174, 96)',
         justifyContent: 'center',
-        marginBottom: 15
+        marginBottom: 15,
+        borderRadius: 5
     },
     signUpText: {
         fontSize: 18,

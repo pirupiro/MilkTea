@@ -13,10 +13,12 @@ export default function CartIcon(props) {
     const itemContext = useContext(ItemContext);
 
     return (
-        <TouchableOpacity onPress={() => { props.navigation.navigate('CartScreen'); }}>
+        <TouchableOpacity
+            onPress={() => { props.navigation.navigate('CartScreen'); }}
+            style={{ marginRight: 20 }}
+        >
             <Ionicons
                 name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
-                style={{ marginRight: 20 }}
                 size={30}
                 color='rgb(181, 52, 113)'
             ></Ionicons>
@@ -24,7 +26,7 @@ export default function CartIcon(props) {
                 itemContext.cartItems.length > 0 &&
                 (
                     <View style={styles.icon}>
-                        <Text>{itemContext.cartItems.length}</Text>
+                        <Text style={styles.quantiy}>{itemContext.cartItems.length}</Text>
                     </View>
                 )
             }
@@ -43,5 +45,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -6,
         left: -6
+    },
+    quantiy: {
+        fontSize: 12,
+        color: 'white'
     }
 })
