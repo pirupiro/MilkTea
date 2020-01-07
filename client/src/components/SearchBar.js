@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 3,
         borderRadius: windowWidth,
-        backgroundColor: 'rgb(210, 211, 215)'
+        backgroundColor: 'rgb(213, 220, 223)'
     },
     input: {
         flex: 1,

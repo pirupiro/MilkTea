@@ -36,15 +36,18 @@ export default function CartIcon(props) {
 
 const styles = StyleSheet.create({
     badge: {
-        width: 22,
+        minWidth: 20,
         height: 20,
         backgroundColor: 'rgb(106, 176, 76)',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 11,
+        borderRadius: 10,
+        paddingHorizontal: 4,
+        borderWidth: 1,
+        borderColor: 'white',
         position: 'absolute',
-        top: -6,
-        left: -8
+        top: -7,
+        left: -7
     },
     quantiy: {
         fontSize: 12,

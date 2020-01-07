@@ -9,8 +9,8 @@ const MainNavigator = createBottomTabNavigator({
     InfoStack
 }, {
     tabBarOptions: {
-        activeTintColor: 'rgb(183, 21, 64)',
-        inactiveTintColor: 'rgb(96, 96, 96)',
+        activeTintColor: 'rgb(181, 52, 113)',
+        inactiveTintColor: 'gray',
         showLabel: false,
         showIcon: true
     }

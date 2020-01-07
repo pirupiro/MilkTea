@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         flex: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(210, 211, 215)',
+        backgroundColor: 'rgb(220, 221, 225)',
         borderRadius: 5,
         borderBottomRightRadius: 10,
         borderTopRightRadius: 10

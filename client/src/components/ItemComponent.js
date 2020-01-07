@@ -140,13 +140,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     price: {
-        fontSize: 18
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'rgb(7, 153, 146)'
     },
     iconContainer: {
         flex: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(210, 211, 215)',
+        backgroundColor: 'rgb(213, 220, 223)',
         borderRadius: 5,
         borderTopRightRadius: 15,
         borderBottomRightRadius: 15

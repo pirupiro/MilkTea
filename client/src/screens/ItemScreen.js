@@ -73,7 +73,7 @@ export default function ItemScreen(props) {
                 <TouchableOpacity
                     style={{
                         padding: 10,
-                        backgroundColor: 'rgb(223, 230, 233)',
+                        backgroundColor: 'rgb(213, 220, 223)',
                         borderRadius: 10
                     }}
                     onPress={onCartPress}
