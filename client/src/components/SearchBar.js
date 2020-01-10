@@ -21,6 +21,7 @@ export default function SearchBar(props) {
                 size={25}
                 color='gray'
             ></Ionicons>
+
             <TextInput
                 ref={input}
                 style={styles.input}
@@ -32,6 +33,7 @@ export default function SearchBar(props) {
                 placeholder='Tìm kiếm...'
                 placeholderTextColor='gray'
             ></TextInput>
+
             {
                 doSearch &&
                 (

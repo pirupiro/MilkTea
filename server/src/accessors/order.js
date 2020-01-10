@@ -9,18 +9,22 @@ class OrderAccessor {
         return OrderModel.find(
             { status },
             { details: 0 }
-        ).lean();
+        ).sort({
+            createdAt: 'desc'
+        }).lean();
     }
 
     getAllByStatusWithUserId(status, userId) {
         return OrderModel.find(
             { status, userId },
             { details: 0 }
-        ).lean();
+        ).sort({
+            createdAt: 'desc'
+        }).lean();
     }
 
     getById(id) {
-        return OrderModel.findById(id).lean();
+        return OrderModel.findById(id, { details: 1 }).lean();
     }
 
     updateById(id, order) {

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -10,49 +10,22 @@ import {
     TouchableOpacity,
     AsyncStorage
 } from 'react-native';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import UserContext from '../context/UserContext';
-import ItemContext from '../context/ItemContext';
 import { getImageURI } from '../Networking';
 import CartIcon from '../components/CartIcon';
+import ModalBox from '../components/ModalBox';
 
 const { width: windowWith } = Dimensions.get('window');
 
 export default function ItemScreen(props) {
+    const [isVisible, setIsVisible] = useState(false);
     const { _id, name, price, image, description, formatNumber } = props.navigation.state.params;
     const userContext = useContext(UserContext);
-    const itemContext = useContext(ItemContext);
 
     function onCartPress() {
         if (userContext.loggedIn) {
-            let cartItems = itemContext.cartItems.slice();
-
-            async function addToCart() {
-                const index = cartItems.map(item => item._id).indexOf(_id);
-
-                if (index < 0) { // Newly added item
-                    const newItem = {
-                        _id: _id,
-                        name: name,
-                        unitPrice: price,
-                        quantity: 1
-                    };
-
-                    cartItems.push(newItem);
-                } else { // Increase quantity of the selected item by 1
-                    cartItems[index].quantity++;
-                }
-
-                await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
-            }
-
-            addToCart()
-                .then(() => {
-                    itemContext.setCartItems(cartItems);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            setIsVisible(true);
         } else {
             props.navigation.navigate('InfoStack');
         }
@@ -88,6 +61,14 @@ export default function ItemScreen(props) {
 
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.description}>{description}</Text>
+
+            <ModalBox
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+                _id={_id}
+                name={name}
+                price={price}
+            />
         </ScrollView>
     );
 }

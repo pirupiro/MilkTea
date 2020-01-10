@@ -5,6 +5,7 @@ import {
     SectionList,
     InteractionManager
 } from 'react-native';
+
 import ItemComponent from '../components/ItemComponent';
 import HeaderComponent from '../components/HeaderComponent';
 import ItemContext from '../context/ItemContext';
@@ -69,5 +70,5 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 5,
         backgroundColor: 'rgb(248, 248, 248)'
-    }
+    },
 });
