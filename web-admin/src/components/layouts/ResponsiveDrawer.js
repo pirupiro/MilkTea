@@ -14,8 +14,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-// import { Link } from "react-router-dom";
-import { Link } from '@material-ui/core';
+
+import { Link } from "react-router-dom";
+// import { Link } from '@material-ui/core';
+
 
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
@@ -44,58 +46,58 @@ function ResponsiveDrawer(props) {
 	const onClickLogout = () => {
 		logout();
 	}
-	
+
 
 	const drawer = (
 		<div>
 			<div className={classes.toolbar} />
 			<Divider />
 			<List>
-				<Link href="/" color='textPrimary'>
+				<Link to="/" color='textPrimary'>
 					<ListItem button>
 						<div className="drinkLink"></div>
 						<ListItemIcon>
 							<LocalDrinkIcon/>
 						</ListItemIcon>
-						<ListItemText primary="drinks" />
+						<ListItemText primary="Drinks" />
 						<Divider />
 					</ListItem>
 				</Link>
 
-				<Link href="/category" color='textPrimary'>
+				<Link to="/category" color='textPrimary'>
 					<ListItem button>
 						<ListItemIcon>
 							<div className="categoriesLink" />
 							<ListItemIcon>
-								<CategoryIcon/>>
+								<CategoryIcon/>
 							</ListItemIcon>
-							<ListItemText primary="Category" />
+							<ListItemText primary="Categories" />
 							<Divider />
 						</ListItemIcon>
 					</ListItem>
 				</Link>
 
-				<Link href="/admin" color='textPrimary'>
+				<Link to="/admin" color='textPrimary'>
 					<ListItem button>
 						<ListItemIcon>
 							<div className="adminsLink" />
 							<ListItemIcon>
-								<AccessibilityIcon/>>
+								<AccessibilityIcon/>
 							</ListItemIcon>
-							<ListItemText primary="Admin" />
+							<ListItemText primary="Admins" />
 							<Divider />
 						</ListItemIcon>
 					</ListItem>
 				</Link>
 
-				<Link href="/order" color='textPrimary'>
+				<Link to="/order" color='textPrimary'>
 					<ListItem button>
 						<ListItemIcon>
 							<div className="orderLink" />
 							<ListItemIcon>
-								<ListAltIcon/>>
+								<ListAltIcon/>
 							</ListItemIcon>
-							<ListItemText primary="Order" />
+							<ListItemText primary="Orders" />
 							<Divider />
 						</ListItemIcon>
 					</ListItem>
@@ -105,12 +107,12 @@ function ResponsiveDrawer(props) {
 						<ListItemIcon >
 							<div className="Logout" />
 							<ListItemIcon>
-								<ExitToAppIcon/>>
+								<ExitToAppIcon/>
 							</ListItemIcon>
 							<ListItemText primary="Logout" />
 							<Divider />
 						</ListItemIcon>
-					</ListItem>
+				</ListItem>
 			</List>
 		</div>
 	);

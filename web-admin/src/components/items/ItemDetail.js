@@ -10,13 +10,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import ButtonBase from "@material-ui/core/ButtonBase";
-
+import MenuItem from '@material-ui/core/MenuItem';
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+
+import CategoryContext from "../../contexts/category/CategoryContext";
 
 import ItemContext from "../../contexts/item/ItemContext";
 import { url, getImageURI, ImagePath } from "../../routers/Networking";
@@ -52,17 +54,15 @@ const useStyles = makeStyles(theme => ({
 export default function ItemDetail({ item }) {
 	const itemContext = useContext(ItemContext);
 	const { deleteItem, updateItem } = itemContext;
-
 	const [open, setOpen] = React.useState(false);
 
-	const [data, setData] = React.useState({
-		name: "",
-		price: "",
-		category: "",
-		description: ""
-	});
+	const [data, setData] = React.useState({...item});
+
+	const categoryContext = useContext(CategoryContext);
+	const { categories, getCategory } = categoryContext;
 
 	useEffect(() => {
+		getCategory();
 		ImagePath(item.image);
 	}, []);
 
@@ -86,7 +86,13 @@ export default function ItemDetail({ item }) {
 		setOpen(false);
 	};
 
-	const onChange = e => setData({ ...data, [e.target.name]: e.target.value });
+	const onChange = e => {
+		const newData = {
+			...data,
+			[e.target.name]: e.target.value
+		};
+		setData(newData);
+	}
 
 	const classes = useStyles();
 	return (
@@ -157,7 +163,9 @@ export default function ItemDetail({ item }) {
 							label="name"
 							multiline
 							variant="outlined"
+							name="name"
 							onChange={onChange}
+							value={data.name}
 						/>
 
 						<TextField
@@ -168,7 +176,9 @@ export default function ItemDetail({ item }) {
 								shrink: true
 							}}
 							variant="outlined"
+							name="price"
 							onChange={onChange}
+							value={data.price}
 							fullWidth
 						/>
 
@@ -177,16 +187,39 @@ export default function ItemDetail({ item }) {
 							label="Description"
 							multiline
 							variant="outlined"
+							name="description"
 							onChange={onChange}
+							value={data.description}
 						/>
 
-						<TextField
+						{/* <TextField
 							id="outlined-textarea"
 							label="Category"
 							multiline
 							variant="outlined"
+							name="category"
 							onChange={onChange}
-						/>
+							value={data.category}
+						/> */}
+
+						<TextField
+							id="standard-select-currency"
+							select
+							label="Category"
+							value={data.category}
+							onChange={onChange}
+							name="category"
+							helperText="Select category"
+						>
+							{categories.map(option => (
+								<MenuItem
+									key={option.name}
+									value={option.name}
+								>
+									{option.name}
+								</MenuItem>
+							))}
+						</TextField>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={handleClose} color="primary">

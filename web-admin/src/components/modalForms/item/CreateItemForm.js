@@ -43,7 +43,6 @@ const CreateAdminForm = () => {
 	const [description, setDescription] = useState({});
 
 	const categoryContext = useContext(CategoryContext);
-
 	const { categories, getCategory } = categoryContext;
 
 	useEffect(() => {
@@ -140,10 +139,9 @@ const CreateAdminForm = () => {
 						<TextField
 							id="standard-select-currency"
 							select
-							label="Select"
-							// value={currency}
+							label="Category"
 							onChange={e => setCategory(e.target.value)}
-							helperText="Please select your currency"
+							helperText="Select category"
 						>
 							{categories.map(option => (
 								<MenuItem
@@ -163,8 +161,6 @@ const CreateAdminForm = () => {
 								multiple
 								type="file"
 								name="image"
-								// value={image}
-								// onChange={onChange}
 								onChange={e => {
 									setImage(e.target.files[0]);
 									console.log(setImage);
@@ -175,7 +171,6 @@ const CreateAdminForm = () => {
 									variant="contained"
 									color="primary"
 									component="span"
-									// onClick={onClickUpload}
 								>
 									Upload
 								</Button>

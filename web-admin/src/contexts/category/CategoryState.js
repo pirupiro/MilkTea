@@ -55,25 +55,23 @@ export const CategoryState = props => {
 	};
 
 	//update
-	const updateCategory = async (id, name) => {
+	const updateCategory = async (id, category) => {
 		try {
 			const res = await axios.put(
 				url + `/categories/${id}`,
-				// url + '/categories',
-				// {
-				// 	params: {
-				// 		id: id
-				// 	}
-				// },
-				name,
-				configUrlLencode
-				// config
+				category,
+				config
 			);
+			const data = res.data;
 
-			dispatch({
-				type: UPDATE_CATEGORY,
-				payload: res.data.data
-			});
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: UPDATE_CATEGORY,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
 			alert(err);
 		}

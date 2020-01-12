@@ -66,12 +66,17 @@ export const ItemState = props => {
 	//update
 	const updateItem = async (id, item) => {
 		try {
-			const res = await axios.put(url + `/items/${id}`, item, configUrlLencode);
+			const res = await axios.put(url + `/items/${id}`, item, config);
+			const data = res.data;
 
-			dispatch({
-				type: UPDATE_ITEM,
-				payload: res.data.data
-			});
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: UPDATE_ITEM,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
 			console.log(err);
 		}

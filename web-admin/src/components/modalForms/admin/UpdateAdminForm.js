@@ -31,9 +31,9 @@ export default function UpdateAdminForm({ props, setProps, admin }) {
 
 	const { updatePassword } = adminContext;
 
-	const [data, setData] = useState({		
+	const [data, setData] = useState({
 		password: ""
-	});	
+	});
 
 	// set component
 	// const [props, setProps] = React.useState(false);fclass
@@ -48,7 +48,7 @@ export default function UpdateAdminForm({ props, setProps, admin }) {
 	};
 
 	const onChange = e =>
-		setData({ ...admin, [e.target.name]: e.target.value });
+		setData({ password: e.target.value });
 
 	const handleSubmit = e => {
 		e.preventDefault();

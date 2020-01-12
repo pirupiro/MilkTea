@@ -12,10 +12,10 @@ export default (state, action) => {
 				...state,
 				admins: action.payload
 			};
-		case CREATE_ADMIN:		
+		case CREATE_ADMIN:
 			return {
 				...state,
-        admins: [action.payload, ...state.admins],
+        		admins: [action.payload, ...state.admins]
 			};
 		case UPDATE_PASSWORD:
 			return {

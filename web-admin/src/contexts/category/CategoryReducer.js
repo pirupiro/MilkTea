@@ -1,7 +1,7 @@
-import { 
-  GET_CATEGORY, 
-  CREATE_CATEGORY, 
-  UPDATE_CATEGORY 
+import {
+  GET_CATEGORY,
+  CREATE_CATEGORY,
+  UPDATE_CATEGORY
 } from "../DispatchType";
 
 export default (state, action) => {
@@ -11,10 +11,10 @@ export default (state, action) => {
 				...state,
 				categories: action.payload
 			};
-		case CREATE_CATEGORY:	
+		case CREATE_CATEGORY:
 			return {
 				...state,
-        categories: [action.payload, ...state.categories],
+        		categories: [action.payload, ...state.categories],
 			};
 			case UPDATE_CATEGORY:
 				return {
@@ -22,9 +22,8 @@ export default (state, action) => {
 					categories: state.categories.map(category =>
 						category._id === action.payload._id ? action.payload : category
 					)
-					
+
 				};
-			
 			default:
 				return state;
 		}

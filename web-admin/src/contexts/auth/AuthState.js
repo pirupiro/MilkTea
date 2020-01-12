@@ -7,7 +7,7 @@ import { url } from "../../routers/Networking";
 import {
 	LOGIN_SUCCESS,
 	LOGIN_FAIL,
-	LOGOUT,	
+	LOGOUT,
 } from "../DispatchType";
 
 const config = {
@@ -17,22 +17,27 @@ const config = {
 };
 
 const AuthState = props => {
-  
+
 	const [state, dispatch] = useReducer(AuthReducer, {
 		token: null,
 		isAuthenticated: false,
 		error: null
   });
-  
+
 	// Login User
 	const login = async formData => {
 		try {
 			const res = await axios.post(url + "/admins/login", formData, config);
+			const data = res.data;
 
-			dispatch({
-				type: LOGIN_SUCCESS,
-				payload: res.data.data
-			});
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: LOGIN_SUCCESS,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
 			console.log(err);
 		}
@@ -40,7 +45,8 @@ const AuthState = props => {
 
 	// Logout
 	const logout = () => dispatch({ type: LOGOUT });
-
+	console.log(state.isAuthenticated);
+	console.log(state.token);
 	return (
 		<AuthContext.Provider
 			value={{

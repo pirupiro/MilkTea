@@ -30,33 +30,22 @@ export const AdminState = props => {
 		admins: []
 	});
 
-	const loginAdmin = async (data ) => {
-		try {
-			const res = await axios.post(url + "/admins/login", data, config);
-
-			dispatch({
-				type: LOGIN_SUCCESS,
-				payload: res.data.data
-			});
-		} catch (err) {
-			alert(err);
-		}
-	};
-
 	const getAdmin = async () => {
 		try {
 			const res = await axios.get(url + "/admins");
+			const data = res.data;
 
-			dispatch({
-				type: GET_ADMIN,
-				payload: res.data.data
-			});
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: GET_ADMIN,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: err.res.data.msg
-      });
-    }
+			console.error(err);
+    	}
 	};
 
 	const addAdmin = async admin => {
@@ -73,15 +62,21 @@ export const AdminState = props => {
 
 	const updatePassword = async (id, data) => {
 		try {
-			const res = await axios.put(url + `/admins/${id}`, 
-				data, 
-				configUrlLencode
+			const res = await axios.put(url + `/admins/${id}`,
+				data,
+				config
 			);
 
-			dispatch({
-				type: UPDATE_PASSWORD,
-				payload: res.data.data
-			});
+			data = res.data;
+
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: UPDATE_PASSWORD,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
 			alert(err);
 		}

@@ -53,7 +53,7 @@ export default function AdminDetail({ admin }) {
 
 	const onDelete = () => {
 		deleteAdmin(admin._id);
-	};	
+	};
 
 	return (
 		<div>
@@ -62,7 +62,7 @@ export default function AdminDetail({ admin }) {
 					button
 					fullwidth='true'
 					onClick={handleClickOpen}
-					key="admin._id"
+					key={admin._id}
 				>
 					<ListItemText primary={admin.username} />
 					<ListItemSecondaryAction>
@@ -77,7 +77,7 @@ export default function AdminDetail({ admin }) {
 				</ListItem>
 			</div>
 
-			<UpdateAdminForm 
+			<UpdateAdminForm
 				props={open}
 				setProps={setOpen}
 				admin={admin}

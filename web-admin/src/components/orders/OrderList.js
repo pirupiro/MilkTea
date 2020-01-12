@@ -31,7 +31,7 @@ export default function OrderList(status) {
 	//handle state
 	useEffect(() => {
 		const data = getOrderByStat(GetStat(value));
-		
+
 		// console.log(data);
 		// console.log(GetStat(value));
 		// console.log(selectedRow)
@@ -50,14 +50,7 @@ export default function OrderList(status) {
 	//dialog handling
 	const [openDialog, setOpenDialog] = React.useState(false);
 	const [selectedRow, setSelectedRow] = React.useState(null);
-	const handleClickOpen = res => {
-		setOpenDialog(true);
-		setSelectedRow(res);
-	};
-	const handleSelectRow = rowIndex => {
-		// setSelectedRow(rowIndex);
-		// console.log(selectedRow);
-	};
+
 	return (
 		<div>
 			<Paper className={classes.root}>
@@ -65,9 +58,10 @@ export default function OrderList(status) {
 					<Table stickyHeader aria-label="sticky table">
 						<TableHead>
 							<TableRow>
-								<TableCell>name</TableCell>
-								<TableCell>totalPrice</TableCell>
-								<TableCell>detail</TableCell>
+								<TableCell>Name</TableCell>
+								<TableCell>Total Price</TableCell>
+								<TableCell>Time</TableCell>
+								<TableCell>Date</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -77,27 +71,24 @@ export default function OrderList(status) {
 									page * rowsPerPage + rowsPerPage
 								)
 								.map(order => {
+									const createdAt = new Date(order.createdAt);
+									const date = `${createdAt.getDate()}/${createdAt.getMonth() + 1}/${createdAt.getFullYear()}`;
+									const time = `${createdAt.getHours()}:${createdAt.getMinutes()}:${createdAt.getSeconds()}`;
+
 									return (
 										<TableRow
 											hover
 											role="checkbox"
-											// tabIndex={-1}
-											// onClick={handleClickOpen(order._id)}
 											onClick={() => {
 												setOpenDialog(true);
 												setSelectedRow(order._id);
 											}}
 											key={order._id}
-											// onSelectRow={() => handleSelectRow(order._id)}
 										>
 											<TableCell>{order.name}</TableCell>
-											<TableCell>
-												{order.totalPrice}
-											</TableCell>
-
-											<TableCell>
-												
-											</TableCell>
+											<TableCell>{order.totalPrice}</TableCell>
+											<TableCell>{time}</TableCell>
+											<TableCell>{date}</TableCell>
 										</TableRow>
 									);
 								})}

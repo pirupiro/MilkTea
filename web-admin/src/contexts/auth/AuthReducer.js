@@ -2,7 +2,7 @@ import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "../DispatchType";
 import setToken from "../../routers/setToken";
 
 export default (state, action) => {
-	switch (action.type) {		
+	switch (action.type) {
 		case LOGIN_SUCCESS:
 			localStorage.setItem("token", action.payload.token);
 			return {
@@ -11,8 +11,7 @@ export default (state, action) => {
 				token: setToken(localStorage.token),
 				isAuthenticated: true
 			};
-		case LOGIN_FAIL:
-		case LOGOUT:
+		case LOGIN_FAIL, LOGOUT:
 			localStorage.removeItem("token");
 			return {
 				...state,

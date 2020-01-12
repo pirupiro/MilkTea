@@ -26,38 +26,22 @@ export default function OrderForm({ props, setProps, orderID }) {
 	const orderContext = useContext(OrderContext);
 	const { orders, getOrderByID } = orderContext;
 	// const { details } = orders;
-	const [datas, setDatas] = useState([]);
+	const [details, setDetails] = useState([]);
 
-	// const { details } = datas;
 
 	useEffect(() => {
-		// getOrderByID(orderID);
-		// const res = getOrderByID(orderID);
-		// console.log(res);
-		// setDatas({ data: res });
-		// console.log(orders);
 		const fetchData = async () => {
-			// const result = await
-			axios.get(url + "/orders", {
-				params: {
-					id: orderID
-				},
-				headers: {
-					"content-type":
-						"application/x-www-form-urlencoded;charset=utf-8"
-				}
-			});
+			const res = await axios.get(url + "/orders/" + orderID);
+			return res;
 		};
 		fetchData()
 			.then(res => {
-				setDatas(res.data.data.details);
-				console.log(datas);
-				console.log(res);
+				setDetails(res.data.data.details);
 			})
 			.catch(error => {
 				console.error(error);
 			});
-		console.log(datas);
+
 		console.log(orderID);
 	}, [orderID]);
 
@@ -65,7 +49,7 @@ export default function OrderForm({ props, setProps, orderID }) {
 	// const [props, setProps] = React.useState(false);
 	const classes = useStyles();
 	const theme = useTheme();
-	const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+	const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
 
 	const handleClickOpen = () => {
 		setProps(true);
@@ -104,79 +88,40 @@ export default function OrderForm({ props, setProps, orderID }) {
 						>
 							<TableHead>
 								<TableRow>
-									<TableCell align="center" colSpan={3}>
-										Details
-									</TableCell>
-									<TableCell align="right">Price</TableCell>
+									<TableCell align="center" colSpan={4}>Details</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Desc</TableCell>
-									<TableCell align="right">Qty.</TableCell>
-									<TableCell align="right">Unit</TableCell>
-									<TableCell align="right">Sum</TableCell>
+									<TableCell>Price</TableCell>
+									<TableCell>Qty</TableCell>
+									<TableCell>Sum</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{/* {datas.map(data => {
-									return data.details.map(detail => {
+								{
+									details.map(detail => {
 										return (
 											<TableRow
-											// key={detail._id}
 											>
-												<TableCell>
-													{data.name}
-												</TableCell> */}
-								{/* <TableCell align="right">
-											{order.details.quantity}
-										</TableCell>
-										<TableCell align="right">
-											{order.details.unitPrice}
-										</TableCell>
-										<TableCell align="right">
-											{order.details.totalPrice}
-										</TableCell> */}
-								{/* </TableRow> */}
-								{/* ); }); })} */}
-
-								{datas.map(data => {
-									return (
-										<TableRow
-										// key={detail._id}
-										>
-											<TableCell>{data.name}</TableCell>
-										</TableRow>
-									);
-								})}
+												<TableCell>{detail.name}</TableCell>
+												<TableCell>{detail.unitPrice}</TableCell>
+												<TableCell>{detail.quantity}</TableCell>
+												<TableCell>{detail.totalPrice}</TableCell>
+											</TableRow>
+										);
+									})
+								}
 								<TableRow>
-									<TableCell rowSpan={3} />
-									<TableCell colSpan={2}>Total</TableCell>
-									<TableCell align="right">
-										{/* {details
-											.map(detail => detail.totalPrice)
-											.reduce((a, b) => a + b)
-                    } */}
-
-										{/* {details &&
-											details.map(details => {
-												return;
-												details
-													.map(
-														order =>
-															order.totalPrice
-													)
-													.reduce((a, b) => a + b);
-											})} */}
+									<TableCell colSpan={2}></TableCell>
+									<TableCell>Total</TableCell>
+									<TableCell>
+										{
+											details
+												.map(detail => parseInt(detail.totalPrice))
+												.reduce((a, b) => a + b, 0)
+										}
 									</TableCell>
 								</TableRow>
-								{/* <TableRow>
-									<TableCell>Quantity</TableCell>
-									<TableCell align="right"></TableCell>
-									<TableCell align="right"></TableCell>
-								</TableRow>
-								<TableRow>
-									<TableCell colSpan={2}>Total</TableCell>
-									<TableCell align="right"></TableCell>
-								</TableRow> */}
 							</TableBody>
 						</Table>
 					</TableContainer>
@@ -189,7 +134,7 @@ export default function OrderForm({ props, setProps, orderID }) {
 						color="primary"
 						type="submit"
 						value="addOrder"
-						// onClick={handleSubmit}
+					// onClick={handleSubmit}
 					>
 						Update
 					</Button>

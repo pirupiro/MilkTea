@@ -32,7 +32,7 @@ export default function CategoryDetail({ category }) {
 	//prep state
 	const categoryContext = useContext(CategoryContext);
 	const { updateCategory } = categoryContext;
-	const [name, setName] = useState("");
+	const [name, setName] = useState(category.name);
 
 	//prep component
 	const classes = useStyles();
@@ -50,7 +50,6 @@ export default function CategoryDetail({ category }) {
 		e.preventDefault();
 		updateCategory(category._id, { name });
 		setOpen(false);
-		// then(console.log(res));
 	};
 
 	return (
@@ -58,14 +57,12 @@ export default function CategoryDetail({ category }) {
 			<div>
 				<ListItem
 					button
-					// fullwidth="true"
 					onClick={handleClickOpen}
 					key="category._id"
 				>
 					<ListItemText
 						primary={
 							<Typography
-								// primary={category.name}
 								align="center"
 							>
 								{category.name}
@@ -75,7 +72,6 @@ export default function CategoryDetail({ category }) {
 				</ListItem>
 			</div>
 
-			{/* define dialog box */}
 			<div>
 				<Dialog
 					open={open}
@@ -97,7 +93,6 @@ export default function CategoryDetail({ category }) {
 							multiline
 							variant="outlined"
 							value={category.name}
-							// onChange={onChange}
 						/>
 
 						<TextField
@@ -105,7 +100,7 @@ export default function CategoryDetail({ category }) {
 							label="New name"
 							multiline
 							variant="outlined"
-							value={category.name || ''}
+							value={name}
 							onChange={e => setName(e.target.value)}
 						/>
 					</DialogContent>
