@@ -8,7 +8,9 @@ import {
 	GET_ADMIN,
 	CREATE_ADMIN,
 	UPDATE_PASSWORD,
-	DELETE_ADMIN
+	DELETE_ADMIN,
+	LOGIN_SUCCESS,
+	LOGIN_FAIL
 } from "../DispatchType";
 
 const config = {
@@ -17,10 +19,29 @@ const config = {
 	}
 };
 
+const configUrlLencode = {
+	headers: {
+		"content-type": "application/x-www-form-urlencoded;charset=utf-8"
+	}
+};
+
 export const AdminState = props => {
 	const [state, dispatch] = useReducer(AdminReducer, {
 		admins: []
 	});
+
+	const loginAdmin = async (data ) => {
+		try {
+			const res = await axios.post(url + "/admins/login", data, config);
+
+			dispatch({
+				type: LOGIN_SUCCESS,
+				payload: res.data.data
+			});
+		} catch (err) {
+			alert(err);
+		}
+	};
 
 	const getAdmin = async () => {
 		try {
@@ -31,8 +52,11 @@ export const AdminState = props => {
 				payload: res.data.data
 			});
 		} catch (err) {
-			alert(err);
-		}
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.res.data.msg
+      });
+    }
 	};
 
 	const addAdmin = async admin => {
@@ -51,7 +75,7 @@ export const AdminState = props => {
 		try {
 			const res = await axios.put(url + `/admins/${id}`, 
 				data, 
-				// config
+				configUrlLencode
 			);
 
 			dispatch({

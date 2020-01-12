@@ -3,8 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
+import Typography from "@material-ui/core/Typography";
 
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -32,12 +31,8 @@ const useStyles = makeStyles(theme => ({
 export default function CategoryDetail({ category }) {
 	//prep state
 	const categoryContext = useContext(CategoryContext);
-	const { deleteCategory, updateCategory } = categoryContext;
-	const [data, setData] = useState({
-		name: ""
-	});
-
-	const { username, password } = category;
+	const { updateCategory } = categoryContext;
+	const [name, setName] = useState("");
 
 	//prep component
 	const classes = useStyles();
@@ -53,14 +48,10 @@ export default function CategoryDetail({ category }) {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		updateCategory(category._id, data);
+		updateCategory(category._id, { name });
 		setOpen(false);
 		// then(console.log(res));
 	};
-
-
-	const onChange = e =>
-		setData({ ...category, [e.target.name]: e.target.value });
 
 	return (
 		<div>
@@ -71,8 +62,16 @@ export default function CategoryDetail({ category }) {
 					onClick={handleClickOpen}
 					key="category._id"
 				>
-					<ListItemText primary={category.name} />
-					
+					<ListItemText
+						primary={
+							<Typography
+								// primary={category.name}
+								align="center"
+							>
+								{category.name}
+							</Typography>
+						}
+					/>
 				</ListItem>
 			</div>
 
@@ -98,6 +97,7 @@ export default function CategoryDetail({ category }) {
 							multiline
 							variant="outlined"
 							value={category.name}
+							// onChange={onChange}
 						/>
 
 						<TextField
@@ -105,7 +105,8 @@ export default function CategoryDetail({ category }) {
 							label="New name"
 							multiline
 							variant="outlined"
-							onChange={onChange}
+							value={category.name || ''}
+							onChange={e => setName(e.target.value)}
 						/>
 					</DialogContent>
 					<DialogActions>

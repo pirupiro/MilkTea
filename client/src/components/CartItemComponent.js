@@ -172,9 +172,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center'
     },
-    quantity: {
-        fontSize: 18
-    },
     remove: {
         flex: 15,
         justifyContent: 'center',

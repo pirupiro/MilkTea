@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -38,7 +38,7 @@ export default function Login() {
 
 	// set context
 	const authContext = useContext(AuthContext);
-	const { login } = authContext;
+	const { login, isAuthenticated, token } = authContext;
 
 	const [admin, setAdmin] = useState({
 		username: "",
@@ -46,6 +46,11 @@ export default function Login() {
 	});
 
 	const { username, password } = admin;
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.push("/");
+		}
+	}, [isAuthenticated, token, history]);
 
 	const onChange = e =>
 		setAdmin({ ...admin, [e.target.name]: e.target.value });
@@ -53,20 +58,29 @@ export default function Login() {
 	const handleSubmit = e => {
 		e.preventDefault();
 		// login(admin)09
-		async function logIn() {
-			const res = await axios.post(url + "/users/login", {
+		// async function logIn() {
+		// 	const res = await axios.post(url + "/admins/login", {
+		// 		username,
+		// 		password
+		// 	});
+		// 	return res;
+		// }
+
+		// logIn().then(data => {
+		// 	if (data.error) {
+		// 		alert(data.message);
+		// 	}
+		// 	history.push("/");
+		// });
+
+		if (username === "" || password === "") {
+			alert("Please fill in name and pass");
+		} else {
+			login({
 				username,
 				password
 			});
-			return res.data;
 		}
-
-		logIn().then(data => {
-			if (data.error) {
-				alert(data.message);
-			}
-			history.push("/home");
-		});
 	};
 
 	return (

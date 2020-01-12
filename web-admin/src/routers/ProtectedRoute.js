@@ -4,12 +4,12 @@ import AuthContext from '../contexts/auth/AuthContext';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const authContext = useContext(AuthContext);
-  const { isAuthenticated } = authContext;
+  const { isAuthenticated, token } = authContext;
   return (
     <Route
       {...rest}
       render={props =>
-        !isAuthenticated ? (
+        !isAuthenticated && token != null ? (
           <Redirect to='/login' />
         ) : (
           <Component {...props} />

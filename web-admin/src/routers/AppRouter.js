@@ -15,13 +15,13 @@ export default function AppRouter() {
 			<Fragment>
 				<div className="App">
 					<Switch>
-						<Route path="/" exact component={Login} />
+						{/* <Route path="/" exact component={Login} /> */}
 						<Route path="/login" exact component={Login} />
-						<Route path="/home" exact component={Home} />
-						<Route path="/admin" component={Admin} />
-						<Route path="/category" component={Category} />
-						<Route path="/order" component={Order} />
-						<Route path="*" component={() => "404 not found"} />
+						<ProtectedRoute path="/" exact component={Home} />
+						<ProtectedRoute path="/admin" component={Admin} />
+						<ProtectedRoute path="/category" component={Category} />
+						<ProtectedRoute path="/order" component={Order} />
+						<ProtectedRoute path="*" component={() => "404 not found"} />
 						{/* <Home></Home> */}
 					</Switch>
 				</div>

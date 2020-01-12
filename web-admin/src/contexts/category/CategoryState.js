@@ -6,9 +6,9 @@ import CategoryReducer from "./CategoryReducer";
 import { url } from "../../routers/Networking";
 
 import {
-  GET_CATEGORY,
-  CREATE_CATEGORY,
-  UPDATE_CATEGORY
+	GET_CATEGORY,
+	CREATE_CATEGORY,
+	UPDATE_CATEGORY
 } from "../DispatchType";
 
 const config = {
@@ -17,14 +17,20 @@ const config = {
 	}
 };
 
+const configUrlLencode = {
+	headers: {
+		"content-type": "application/x-www-form-urlencoded;charset=utf-8"
+	}
+};
+
 export const CategoryState = props => {
 	const [state, dispatch] = useReducer(CategoryReducer, {
-		categories: [],
+		categories: []
 	});
 
 	const getCategory = async () => {
 		try {
-			const res = await axios.get(url +"/categories");
+			const res = await axios.get(url + "/categories");
 
 			dispatch({
 				type: GET_CATEGORY,
@@ -49,13 +55,24 @@ export const CategoryState = props => {
 	};
 
 	//update
-	const updateCategory = async (id, category) => {
+	const updateCategory = async (id, name) => {
 		try {
-			const res = await axios.put(url + `/categories/${id}`, category, config);
+			const res = await axios.put(
+				url + `/categories/${id}`,
+				// url + '/categories',
+				// {
+				// 	params: {
+				// 		id: id
+				// 	}
+				// },
+				name,
+				configUrlLencode
+				// config
+			);
 
 			dispatch({
 				type: UPDATE_CATEGORY,
-				payload: res.data
+				payload: res.data.data
 			});
 		} catch (err) {
 			alert(err);
@@ -68,9 +85,7 @@ export const CategoryState = props => {
 				categories: state.categories,
 				addCategory,
 				getCategory,
-				updateCategory,
-				
-				
+				updateCategory
 			}}
 		>
 			{props.children}

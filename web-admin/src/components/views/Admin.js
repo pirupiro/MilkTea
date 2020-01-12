@@ -5,7 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import ResponsiveDrawer from "../layouts/ResponsiveDrawer";
 import AdminList from "../admins/AdminList";
-import CreateAdmin from "../modalForms/admin/CreateAdminForm"
+import CreateAdmin from "../modalForms/admin/CreateAdminForm";
 
 const drawerWidth = 240;
 
@@ -43,16 +43,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Admin() {
 	const classes = useStyles();
-	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
-
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
 
 	return (
 		<div className={classes.root}>
@@ -60,8 +50,8 @@ export default function Admin() {
 			<ResponsiveDrawer></ResponsiveDrawer>
 			<main className={classes.content}>
 				<div className={classes.toolbar} />
-        <CreateAdmin></CreateAdmin>
-				
+				<CreateAdmin></CreateAdmin>
+
 				{/* <CreateItemForm></CreateItemForm> */}
 				<AdminList></AdminList>
 			</main>

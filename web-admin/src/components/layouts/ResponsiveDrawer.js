@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useContext} from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,48 +13,20 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
+import Button from "@material-ui/core/Button";
 // import { Link } from "react-router-dom";
 import { Link } from '@material-ui/core';
 
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import LocalDrinkIcon from "@material-ui/icons/LocalDrink";
 import CategoryIcon from "@material-ui/icons/Category";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+import AuthContext from "../../contexts/auth/AuthContext";
 
 const drawerWidth = 240;
-
-const useStyles = makeStyles(theme => ({
-	root: {
-		display: "flex"
-	},
-	drawer: {
-		[theme.breakpoints.up("sm")]: {
-			width: drawerWidth,
-			flexShrink: 0
-		}
-	},
-	appBar: {
-		[theme.breakpoints.up("sm")]: {
-			width: `calc(100% - ${drawerWidth}px)`,
-			marginLeft: drawerWidth
-		}
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-		[theme.breakpoints.up("sm")]: {
-			display: "none"
-		}
-	},
-	toolbar: theme.mixins.toolbar,
-	drawerPaper: {
-		width: drawerWidth
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3)
-	}
-}));
 
 function ResponsiveDrawer(props) {
 	const { container } = props;
@@ -62,16 +34,24 @@ function ResponsiveDrawer(props) {
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
+	//set state
+	const authContext = useContext(AuthContext);
+	const { logout } = authContext;
+
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
+	const onClickLogout = () => {
+		logout();
+	}
+	
 
 	const drawer = (
 		<div>
 			<div className={classes.toolbar} />
 			<Divider />
 			<List>
-				<Link href="/home" color='textPrimary'>
+				<Link href="/" color='textPrimary'>
 					<ListItem button>
 						<div className="drinkLink"></div>
 						<ListItemIcon>
@@ -81,6 +61,7 @@ function ResponsiveDrawer(props) {
 						<Divider />
 					</ListItem>
 				</Link>
+
 				<Link href="/category" color='textPrimary'>
 					<ListItem button>
 						<ListItemIcon>
@@ -97,7 +78,7 @@ function ResponsiveDrawer(props) {
 				<Link href="/admin" color='textPrimary'>
 					<ListItem button>
 						<ListItemIcon>
-							<div className="categoriesLink" />
+							<div className="adminsLink" />
 							<ListItemIcon>
 								<AccessibilityIcon/>>
 							</ListItemIcon>
@@ -106,6 +87,30 @@ function ResponsiveDrawer(props) {
 						</ListItemIcon>
 					</ListItem>
 				</Link>
+
+				<Link href="/order" color='textPrimary'>
+					<ListItem button>
+						<ListItemIcon>
+							<div className="orderLink" />
+							<ListItemIcon>
+								<ListAltIcon/>>
+							</ListItemIcon>
+							<ListItemText primary="Order" />
+							<Divider />
+						</ListItemIcon>
+					</ListItem>
+				</Link>
+
+				<ListItem button onClick={onClickLogout}>
+						<ListItemIcon >
+							<div className="Logout" />
+							<ListItemIcon>
+								<ExitToAppIcon/>>
+							</ListItemIcon>
+							<ListItemText primary="Logout" />
+							<Divider />
+						</ListItemIcon>
+					</ListItem>
 			</List>
 		</div>
 	);
@@ -127,6 +132,9 @@ function ResponsiveDrawer(props) {
 					<Typography variant="h6" noWrap>
 						Sylas web admin Milk Tea App
 					</Typography>
+					{/* <Button onClick={onClickLogout}>
+						Logout
+					</Button> */}
 				</Toolbar>
 			</AppBar>
 			<nav className={classes.drawer} aria-label="mailbox folders">
@@ -164,14 +172,37 @@ function ResponsiveDrawer(props) {
 	);
 }
 
-ResponsiveDrawer.propTypes = {
-	/**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
-	container: PropTypes.instanceOf(
-		typeof Element === "undefined" ? Object : Element
-	)
-};
+const useStyles = makeStyles(theme => ({
+	root: {
+		display: "flex"
+	},
+	drawer: {
+		[theme.breakpoints.up("sm")]: {
+			width: drawerWidth,
+			flexShrink: 0
+		}
+	},
+	appBar: {
+		[theme.breakpoints.up("sm")]: {
+			width: `calc(100% - ${drawerWidth}px)`,
+			marginLeft: drawerWidth
+		}
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+		[theme.breakpoints.up("sm")]: {
+			display: "none"
+		}
+	},
+	toolbar: theme.mixins.toolbar,
+	drawerPaper: {
+		width: drawerWidth
+	},
+	content: {
+		flexGrow: 1,
+		padding: theme.spacing(3)
+	}
+}));
+
 
 export default ResponsiveDrawer;

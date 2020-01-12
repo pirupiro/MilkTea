@@ -23,7 +23,8 @@ export const GET_CATEGORY = 'GET_CATEGORY';
 export const UPDATE_CATEGORY = 'UPDATE_CATEGORY';
 
 //order
-export const GET_ORDER_LIST = 'GET_ORDER_LIST';
+export const GET_ORDER_BY_ID = 'GET_ORDER_BY_ID';
 export const GET_ORDER_BY_STAT = 'GET_ORDER_BY_STAT';
 export const UPDATE_ORDER_STAT = 'UPDATE_ORDER_STAT';
+
 

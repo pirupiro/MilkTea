@@ -6,9 +6,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import ItemContext from "../../../contexts/item/ItemContext";
+import CategoryContext from "../../../contexts/category/CategoryContext";
+
 // styling
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -32,14 +35,20 @@ const CreateAdminForm = () => {
 	const data = new FormData();
 	//state
 	const itemContext = useContext(ItemContext);
-
 	const { items, addItem } = itemContext;
-
 	const [name, setName] = useState({});
 	const [price, setPrice] = useState({});
 	const [category, setCategory] = useState({});
 	const [image, setImage] = useState({});
 	const [description, setDescription] = useState({});
+
+	const categoryContext = useContext(CategoryContext);
+
+	const { categories, getCategory } = categoryContext;
+
+	useEffect(() => {
+		getCategory();
+	}, []);
 
 	//style
 	const [open, setOpen] = React.useState(false);
@@ -48,7 +57,7 @@ const CreateAdminForm = () => {
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		data.append("name",  name);
+		data.append("name", name);
 		data.append("price", price);
 		data.append("category", category);
 		data.append("description", description);
@@ -109,7 +118,7 @@ const CreateAdminForm = () => {
 							InputLabelProps={{
 								shrink: true
 							}}
-							variant="outlined"	
+							variant="outlined"
 							// onChange={onChange}
 							onChange={e => setPrice(e.target.value)}
 							fullWidth
@@ -129,17 +138,22 @@ const CreateAdminForm = () => {
 						/>
 
 						<TextField
-							id="outlined-number"
-							label="Category"
-							placeholder="Category"
-							variant="outlined"
-							name="category"
-							// value="category"
-							// onChange={onChange}
+							id="standard-select-currency"
+							select
+							label="Select"
+							// value={currency}
 							onChange={e => setCategory(e.target.value)}
-							fullWidth
-							multiline
-						/>
+							helperText="Please select your currency"
+						>
+							{categories.map(option => (
+								<MenuItem
+									key={option.name}
+									value={option.name}
+								>
+									{option.name}
+								</MenuItem>
+							))}
+						</TextField>
 
 						<div className={classes.upload}>
 							<input

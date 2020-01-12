@@ -8,16 +8,18 @@ import AdminState from "./contexts/admin/AdminState";
 import ItemState from "./contexts/item/ItemState";
 import AuthState from "./contexts/auth/AuthState";
 import CategoryState from "./contexts/category/CategoryState";
-
+import OrderState from "./contexts/order/OrderState";
 const App = props => {
 	return (
 		<AuthState>
 			<AdminState>
 				<CategoryState>
 					<ItemState>
-						<div className="container">
-							<AppRouter />
-						</div>
+						<OrderState>
+							<div className="container">
+								<AppRouter />
+							</div>
+						</OrderState>
 					</ItemState>
 				</CategoryState>
 			</AdminState>

@@ -6,13 +6,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
 
 import AdminContext from "../../contexts/admin/AdminContext";
 import UpdateAdminForm from "../modalForms/admin/UpdateAdminForm";
@@ -44,9 +37,7 @@ export default function AdminDetail({ admin }) {
 	const adminContext = useContext(AdminContext);
 	const { deleteAdmin, updatePassword } = adminContext;
 	// const [password, setPassword] = useState({});
-	const [data, setData] = useState({		
-		password: ""
-	});	
+
 
 	//prep component
 	const classes = useStyles();
@@ -62,17 +53,7 @@ export default function AdminDetail({ admin }) {
 
 	const onDelete = () => {
 		deleteAdmin(admin._id);
-	};
-
-	const handleSubmit = e => {
-		e.preventDefault();
-		updatePassword(admin._id, data);
-		setOpen(false);
-		// then(console.log(res));
-	};
-
-	const onChange = e =>
-		setData({ ...admin, [e.target.name]: e.target.value });
+	};	
 
 	return (
 		<div>
@@ -96,8 +77,13 @@ export default function AdminDetail({ admin }) {
 				</ListItem>
 			</div>
 
+			<UpdateAdminForm 
+				props={open}
+				setProps={setOpen}
+				admin={admin}
+			/>
 			{/* define dialog box */}
-			<div>
+			{/* <div>
 				<Dialog
 					open={open}
 					onClose={handleClose}
@@ -149,7 +135,7 @@ export default function AdminDetail({ admin }) {
 						</Button>
 					</DialogActions>
 				</Dialog>
-			</div>
+			</div> */}
 
 			{/* <div>
 				<Dialog

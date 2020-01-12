@@ -1,35 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 import ResponsiveDrawer from "../layouts/ResponsiveDrawer";
-import AdminList from "../admins/AdminList";
-import CreateAdmin from "../modalForms/admin/CreateAdminForm"
+import OrderList from "../../components/orders/OrderList";
 
 const drawerWidth = 240;
 
+export default function Order() {
+	const classes = useStyles();
+	const theme = useTheme();
+	const [open, setOpen] = React.useState(false);
+	const [value, setValue] = React.useState(0);
+
+	//handle state
+	useEffect(() => {
+
+	}, []);
+
+	//handle props
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+		
+	};
+
+	return (
+		<div className={classes.root}>
+			<CssBaseline />
+			<ResponsiveDrawer></ResponsiveDrawer>
+			<main className={classes.content}>
+				<div className={classes.toolbar} />
+				<Tabs
+					value={value}
+					// value={location.pathname}
+					onChange={handleChange}
+					indicatorColor="primary"
+					textColor="primary"
+					centered
+				>
+					<Tab label="Waiting" component={Link} to="/order/waiting" />
+
+					<Tab
+						label="Received"
+						component={Link}
+						to="/order/received"
+					/>
+
+					<Tab
+						label="Completed"
+						component={Link}
+						to="/order/completed"
+					/>
+				</Tabs>
+				<div>
+					<OrderList status={value} />
+				</div>
+			</main>
+		</div>
+	);
+}
+
 const useStyles = makeStyles(theme => ({
 	root: {
-		display: "flex"
-	},
-	drawer: {
-		[theme.breakpoints.up("sm")]: {
-			width: drawerWidth,
-			flexShrink: 0
-		}
-	},
-	appBar: {
-		[theme.breakpoints.up("sm")]: {
-			width: `calc(100% - ${drawerWidth}px)`,
-			marginLeft: drawerWidth
-		}
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-		[theme.breakpoints.up("sm")]: {
-			display: "none"
-		}
+		display: "flex",
+		flexGrow: 1 //add in centered tabs
 	},
 	toolbar: theme.mixins.toolbar,
 	drawerPaper: {
@@ -40,31 +79,3 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(3)
 	}
 }));
-
-export default function Admin() {
-	const classes = useStyles();
-	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
-
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
-
-	return (
-		<div className={classes.root}>
-			<CssBaseline />
-			<ResponsiveDrawer></ResponsiveDrawer>
-			<main className={classes.content}>
-				<div className={classes.toolbar} />
-        <CreateAdmin></CreateAdmin>
-				
-				{/* <CreateItemForm></CreateItemForm> */}
-				<AdminList></AdminList>
-			</main>
-		</div>
-	);
-}

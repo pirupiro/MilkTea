@@ -27,7 +27,7 @@ const AuthState = props => {
 	// Login User
 	const login = async formData => {
 		try {
-			const res = await axios.post(url + "/users/login", formData, config);
+			const res = await axios.post(url + "/admins/login", formData, config);
 
 			dispatch({
 				type: LOGIN_SUCCESS,
