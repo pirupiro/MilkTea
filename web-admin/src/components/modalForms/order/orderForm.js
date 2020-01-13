@@ -13,6 +13,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
@@ -21,13 +23,12 @@ import OrderContext from "../../../contexts/order/OrderContext";
 import axios from "axios";
 import { url } from "../../../routers/Networking";
 
-export default function OrderForm({ props, setProps, orderID }) {
+export default function OrderForm({ props, setProps, orderID, orderStat }) {
 	//set state
 	const orderContext = useContext(OrderContext);
-	const { orders, getOrderByID } = orderContext;
-	// const { details } = orders;
-	const [details, setDetails] = useState([]);
+	const { updateOrder } = orderContext;
 
+	const [details, setDetails] = useState([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -43,10 +44,10 @@ export default function OrderForm({ props, setProps, orderID }) {
 			});
 
 		console.log(orderID);
+		console.log(orderStat);
 	}, [orderID]);
 
 	// set component
-	// const [props, setProps] = React.useState(false);
 	const classes = useStyles();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
@@ -59,14 +60,13 @@ export default function OrderForm({ props, setProps, orderID }) {
 		setProps(false);
 	};
 
-	// const onChange = e =>
-	// 	setData({ ...orders, [e.target.name]: e.target.value });
 
-	// const handleSubmit = e => {
-	// 	e.preventDefault();
-	// 	updatePassword(orders._id, order);
-	// 	setProps(false);
-	// };
+
+	const handleSubmit = e => {
+		e.preventDefault();
+		// updateOrder(orderID, stat);
+		setProps(false);
+	};
 
 	return (
 		<div>
@@ -88,7 +88,9 @@ export default function OrderForm({ props, setProps, orderID }) {
 						>
 							<TableHead>
 								<TableRow>
-									<TableCell align="center" colSpan={4}>Details</TableCell>
+									<TableCell align="center" colSpan={4}>
+										Details
+									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Desc</TableCell>
@@ -98,46 +100,79 @@ export default function OrderForm({ props, setProps, orderID }) {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{
-									details.map(detail => {
-										return (
-											<TableRow
-											>
-												<TableCell>{detail.name}</TableCell>
-												<TableCell>{detail.unitPrice}</TableCell>
-												<TableCell>{detail.quantity}</TableCell>
-												<TableCell>{detail.totalPrice}</TableCell>
-											</TableRow>
-										);
-									})
-								}
+								{details.map(detail => {
+									return (
+										<TableRow>
+											<TableCell>{detail.name}</TableCell>
+											<TableCell>
+												{detail.unitPrice}
+											</TableCell>
+											<TableCell>
+												{detail.quantity}
+											</TableCell>
+											<TableCell>
+												{detail.totalPrice}
+											</TableCell>
+										</TableRow>
+									);
+								})}
 								<TableRow>
 									<TableCell colSpan={2}></TableCell>
 									<TableCell>Total</TableCell>
 									<TableCell>
-										{
-											details
-												.map(detail => parseInt(detail.totalPrice))
-												.reduce((a, b) => a + b, 0)
-										}
+										{details
+											.map(detail =>
+												parseInt(detail.totalPrice)
+											)
+											.reduce((a, b) => a + b, 0)}
 									</TableCell>
 								</TableRow>
 							</TableBody>
 						</Table>
 					</TableContainer>
 				</DialogContent>
+
 				<DialogActions>
-					<Button onClick={handleClose} color="primary">
+					<Button
+						onClick={handleClose}
+						color="primary"
+						variant="contained"
+					>
 						Cancel
 					</Button>
-					<Button
-						color="primary"
-						type="submit"
-						value="addOrder"
-					// onClick={handleSubmit}
-					>
-						Update
-					</Button>
+
+					{orderStat == "waiting" ? (
+						<Button
+							variant="outlined"
+							onClick={() => {
+								updateOrder(orderID, { status: "received" });
+								handleClose();
+							}}
+						>
+							Received
+						</Button>
+					) : orderStat == "received" ? (
+						<Button
+							variant="outlined"
+							onClick={() => {
+								updateOrder(orderID, { status: "completed" });
+								handleClose();
+							}}
+						>
+							{" "}
+							Completed
+						</Button>
+					) : (
+						<TextField
+							id="filled-read-only-input"
+							label=""
+							defaultValue="Completed"
+							InputProps={{
+								readOnly: true
+							}}
+							variant="filled"
+						/>
+					)}
 				</DialogActions>
 			</Dialog>
 		</div>

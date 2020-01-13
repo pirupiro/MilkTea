@@ -7,8 +7,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
 
 import AdminContext from "../../../contexts/admin/AdminContext";
 
@@ -22,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 			margin: theme.spacing(1),
 			width: 200
 		}
-	},
+	}
 }));
 
 export default function UpdateAdminForm({ props, setProps, admin }) {
@@ -47,8 +45,7 @@ export default function UpdateAdminForm({ props, setProps, admin }) {
 		setProps(false);
 	};
 
-	const onChange = e =>
-		setData({ password: e.target.value });
+	const onChange = e => setData({ password: e.target.value });
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -67,7 +64,7 @@ export default function UpdateAdminForm({ props, setProps, admin }) {
 			>
 				<DialogTitle id="form-dialog-title">Admin Form</DialogTitle>
 				<DialogContent>
-					<DialogContentText>Create new Admin</DialogContentText>
+					<DialogContentText>Update Admin</DialogContentText>
 					<TextField
 						id="outlined-textarea"
 						label="Name"

@@ -15,19 +15,6 @@ import Button from "@material-ui/core/Button";
 
 import CategoryContext from "../../contexts/category/CategoryContext";
 
-const useStyles = makeStyles(theme => ({
-	root: {
-		flexGrow: 1,
-		maxWidth: 752
-	},
-	demo: {
-		backgroundColor: theme.palette.background.paper
-	},
-	title: {
-		margin: theme.spacing(4, 0, 2)
-	}
-}));
-
 export default function CategoryDetail({ category }) {
 	//prep state
 	const categoryContext = useContext(CategoryContext);
@@ -55,16 +42,10 @@ export default function CategoryDetail({ category }) {
 	return (
 		<div>
 			<div>
-				<ListItem
-					button
-					onClick={handleClickOpen}
-					key="category._id"
-				>
+				<ListItem button onClick={handleClickOpen} key="category._id">
 					<ListItemText
 						primary={
-							<Typography
-								align="center"
-							>
+							<Typography align="center">
 								{category.name}
 							</Typography>
 						}
@@ -84,7 +65,7 @@ export default function CategoryDetail({ category }) {
 					</DialogTitle>
 					<DialogContent>
 						<DialogContentText>
-							Create new Category
+							Update Category
 						</DialogContentText>
 
 						<TextField
@@ -121,3 +102,17 @@ export default function CategoryDetail({ category }) {
 		</div>
 	);
 }
+
+
+const useStyles = makeStyles(theme => ({
+	root: {
+		flexGrow: 1,
+		maxWidth: 752
+	},
+	demo: {
+		backgroundColor: theme.palette.background.paper
+	},
+	title: {
+		margin: theme.spacing(4, 0, 2)
+	}
+}));

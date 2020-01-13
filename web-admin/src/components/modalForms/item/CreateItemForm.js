@@ -6,9 +6,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
+import Typography from "@material-ui/core/Typography";
 import ItemContext from "../../../contexts/item/ItemContext";
 import CategoryContext from "../../../contexts/category/CategoryContext";
 
@@ -17,7 +17,9 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		"& .MuiTextField-root": {
 			margin: theme.spacing(1),
-			width: 200
+			width: 200,
+			// display: "flex",
+			// flexWrap: "wrap"
 		}
 	},
 	input: {
@@ -27,6 +29,11 @@ const useStyles = makeStyles(theme => ({
 		"& > *": {
 			margin: theme.spacing(1)
 		}
+	},
+	textField: {
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
+		width: 200
 	}
 }));
 
@@ -36,7 +43,7 @@ const CreateAdminForm = () => {
 	//state
 	const itemContext = useContext(ItemContext);
 	const { items, addItem } = itemContext;
-	const [name, setName] = useState({});
+	const [name, setName] = useState([]);
 	const [price, setPrice] = useState({});
 	const [category, setCategory] = useState({});
 	const [image, setImage] = useState({});
@@ -61,8 +68,15 @@ const CreateAdminForm = () => {
 		data.append("category", category);
 		data.append("description", description);
 		data.append("image", image);
-
+		if (name.length === 0
+			|| price.length === 0
+			|| category.length === 0
+			|| description.length === 0
+			|| image.length === 0) {
+			alert("fields is empty, you must fill in");
+		}
 		addItem(data);
+		console.log(name)
 		setOpen(false);
 	};
 	const handleClickOpen = () => {
@@ -80,6 +94,7 @@ const CreateAdminForm = () => {
 				variant="outlined"
 				color="secondary"
 				onClick={handleClickOpen}
+				className={classes.root}
 			>
 				Add Drinks
 			</Button>
@@ -89,7 +104,7 @@ const CreateAdminForm = () => {
 					open={open}
 					onClose={handleClose}
 					aria-labelledby="form-dialog-title"
-					className={classes.root}
+					// className={classes.root}
 					id="formID"
 				>
 					<DialogTitle id="form-dialog-title">
@@ -100,6 +115,7 @@ const CreateAdminForm = () => {
 						<DialogContentText>Create new drinks</DialogContentText>
 						<TextField
 							id="outlined-textarea"
+							required
 							label="Name"
 							placeholder="Name"
 							variant="outlined"
@@ -108,10 +124,13 @@ const CreateAdminForm = () => {
 							// onChange={onChange}
 							onChange={e => setName(e.target.value)}
 							fullWidth
+							style={{ margin: 8 }}
+							margin="normal"
 							multiline
 						/>
 						<TextField
 							id="outlined-number"
+							required
 							label="Price"
 							type="number"
 							InputLabelProps={{
@@ -121,49 +140,64 @@ const CreateAdminForm = () => {
 							// onChange={onChange}
 							onChange={e => setPrice(e.target.value)}
 							fullWidth
-						/>
-
-						<TextField
-							id="outlined-number"
-							label="Description"
-							placeholder="Description"
-							variant="outlined"
-							name="description"
-							// value="description"
-							// onChange={onChange}
-							onChange={e => setDescription(e.target.value)}
-							fullWidth
-							multiline
+							className={classes.textField}
 						/>
 
 						<TextField
 							id="standard-select-currency"
+							required
 							select
 							label="Category"
 							onChange={e => setCategory(e.target.value)}
-							helperText="Select category"
+							error={category === ""}
+							helperText={
+								category === "" ? "Select category" : " "
+							}
+							className={classes.textField}
 						>
 							{categories.map(option => (
-								<MenuItem
-									key={option.name}
-									value={option.name}
-								>
+								<MenuItem key={option.name} value={option.name}>
 									{option.name}
 								</MenuItem>
 							))}
 						</TextField>
 
+						<TextField
+							id="outlined-number"
+							required
+							label="Description"
+							placeholder="Description"
+							variant="outlined"
+							name="description"
+							rows="4"
+							fullWidth
+							style={{ margin: 8 }}
+							margin="normal"
+							onChange={e => setDescription(e.target.value)}
+							error={description.name === ""}
+							helperText={
+								description.name === "" ? "Empty field!" : " "
+							}
+							fullWidth
+							multiline
+						/>
+
 						<div className={classes.upload}>
 							<input
+								required
 								accept="image/*"
 								className={classes.input}
 								id="contained-button-file"
 								multiple
 								type="file"
 								name="image"
+								error={image.name === ""}
+								helperText={
+									image.name === "" ? "Empty field!" : " "
+								}
 								onChange={e => {
 									setImage(e.target.files[0]);
-									console.log(setImage);
+									console.log(e.target.files[0]);
 								}}
 							/>
 							<label htmlFor="contained-button-file">
@@ -174,6 +208,7 @@ const CreateAdminForm = () => {
 								>
 									Upload
 								</Button>
+								<Typography> {image.name}</Typography>
 							</label>
 						</div>
 					</DialogContent>

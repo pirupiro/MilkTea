@@ -51,7 +51,7 @@ export default function CreateAdminForm() {
 				color="secondary"
 				onClick={handleClickOpen}
 			>
-				Open form dialog
+				CREATE ADMIN
 			</Button>
 			<div >
 				<Dialog

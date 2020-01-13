@@ -38,12 +38,17 @@ export const OrderState = props => {
 				},
 				config
 			);
+			const data = res.data;
 
-			dispatch({
-				type: GET_ORDER_BY_ID,
-				payload: res.data.data
-			});
-		} catch (err) {
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: GET_ORDER_BY_ID,
+					payload: res.data.data
+				});
+			}
+		}catch (err) {
 			alert(err);
 		}
 	};
@@ -68,39 +73,26 @@ export const OrderState = props => {
 	//update
 	const updateOrder = async (id, order) => {
 		try {
-			const res = await axios.put(
-				url + `/orders/${id}`,
-				order,
-				configUrlLencode
-			);
+			const res = await axios.put(url + `/orders/${id}`, order, config);
+			const data = res.data;
 
-			dispatch({
-				type: UPDATE_ORDER_STAT,
-				payload: res.data.data
-			});
+			if (data.error) {
+				alert(data.message);
+			} else {
+				dispatch({
+					type: UPDATE_ORDER_STAT,
+					payload: res.data.data
+				});
+			}
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
-	// const deleteOrder = async id => {
-	// 	try {
-	// 		await axios.delete(url + `/orders/${id}`);
-
-	// 		dispatch({
-	// 			type: DELETE_ORDER,
-	// 			payload: id
-	// 		});
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-
 	return (
 		<OrderContext.Provider
 			value={{
 				orders: state.orders,
-				// deleteOrder,
 				updateOrder,
 				getOrderByStat,
 				getOrderByID

@@ -18,15 +18,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import CategoryContext from "../../contexts/category/CategoryContext";
+import CategoryContext from "../../../contexts/category/CategoryContext";
 
-import ItemContext from "../../contexts/item/ItemContext";
-import { url, getImageURI, ImagePath } from "../../routers/Networking";
+import ItemContext from "../../../contexts/item/ItemContext";
+import { url, getImageURI, ImagePath } from "../../../routers/Networking";
 
 export default function ItemDetail({ item }) {
 	const itemContext = useContext(ItemContext);
 	const { deleteItem, updateItem } = itemContext;
-	
+	const [open, setOpen] = React.useState(false);
 
 	const [data, setData] = React.useState({ ...item });
 
@@ -39,8 +39,8 @@ export default function ItemDetail({ item }) {
 	}, []);
 
 	//prep componen
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => {
+
+	const handleClickOpen = () => {
 		setOpen(true);
 	};
 
@@ -48,18 +48,8 @@ export default function ItemDetail({ item }) {
 		setOpen(false);
 	};
 
-	const [openDelete, setOpenDelete] = React.useState(false);
-	const handleOpenDelete = () => {
-		setOpenDelete(true);
-	};
-
-	const handleCloseDelete = () => {
-		setOpenDelete(false);
-	};
-
 	const onDelete = () => {
 		deleteItem(item._id);
-		handleClose();
 	};
 
 	const handleSubmit = e => {
@@ -79,37 +69,6 @@ export default function ItemDetail({ item }) {
 	const classes = useStyles();
 	return (
 		<div>
-			<CardActions>
-				<React.Fragment>
-					<CssBaseline />
-					<CardActions>
-						<ButtonBase onClick={handleOpen}>
-							<Card className={classes.card} spacing={2} xs>
-								<CardMedia
-									className={classes.cardMedia}
-									image={ImagePath(item.image)}
-									title={item.name}
-									key={item._id}
-									button
-								/>
-								<CardContent className={classes.cardContent}>
-									<Typography
-										gutterBottom
-										variant="h5"
-										component="h2"
-									>
-										{item.name}
-									</Typography>
-									<Typography>{item.price}</Typography>
-								</CardContent>
-								<CardActions>									
-									
-								</CardActions>
-							</Card>
-						</ButtonBase>
-					</CardActions>
-				</React.Fragment>
-			</CardActions>
 			<div>
 				<Dialog
 					open={open}
@@ -118,9 +77,9 @@ export default function ItemDetail({ item }) {
 					className={classes.root}
 					onSubmit={handleSubmit}
 				>
-					<DialogTitle id="form-dialog-title">Item Form</DialogTitle>
+					<DialogTitle id="form-dialog-title">Admin Form</DialogTitle>
 					<DialogContent>
-						<DialogContentText>Update Item</DialogContentText>
+						<DialogContentText>Create new Admin</DialogContentText>
 
 						<TextField
 							id="outlined-textarea"
@@ -176,9 +135,6 @@ export default function ItemDetail({ item }) {
 						<Button onClick={handleClose} color="primary">
 							Cancel
 						</Button>
-						<Button onClick={handleOpenDelete} color="primary">
-							Delete
-						</Button>
 						<Button
 							color="primary"
 							type="submit"
@@ -192,8 +148,8 @@ export default function ItemDetail({ item }) {
 			</div>
 			<div>
 				<Dialog
-					open={openDelete}
-					onClose={handleCloseDelete}
+					open={open}
+					onClose={handleClose}
 					aria-labelledby="alert-dialog-title"
 					aria-describedby="alert-dialog-description"
 				>
@@ -206,7 +162,7 @@ export default function ItemDetail({ item }) {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={handleCloseDelete} color="primary">
+						<Button onClick={handleClose} color="primary">
 							Disagree
 						</Button>
 						<Button onClick={onDelete} color="primary" autoFocus>
@@ -214,10 +170,11 @@ export default function ItemDetail({ item }) {
 						</Button>
 					</DialogActions>
 				</Dialog>
-			</div>
+				</div>
 		</div>
 	);
 }
+
 const useStyles = makeStyles(theme => ({
 	cardGrid: {
 		paddingTop: theme.spacing(1),
@@ -227,12 +184,10 @@ const useStyles = makeStyles(theme => ({
 		height: "100%",
 		display: "flex",
 		flexDirection: "column",
-		padding: theme.spacing(2),
-		width: 250,
-		height: 450
+		padding: theme.spacing(2)
 	},
 	cardMedia: {
-		paddingTop: "95.25%" // 16:9
+		paddingTop: "45.25%" // 16:9
 	},
 	cardContent: {
 		flexGrow: 10
